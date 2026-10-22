@@ -4,7 +4,7 @@ const Y = '#d4b84a'
 const GD = '#0e1c13'
 const GM = '#1c3525'
 
-type Page = 'home' | 'coaching-form' | 'impressum' | 'datenschutz'
+type Page = 'home' | 'coaching-form' | 'impressum' | 'datenschutz' | 'gesundheit'
 
 export default function App() {
   const [scrolled, setScrolled] = useState(false)
@@ -21,6 +21,7 @@ export default function App() {
   if (page === 'coaching-form') return <CoachingForm onBack={() => setPage('home')} />
   if (page === 'impressum') return <LegalPage title="Impressum" onBack={() => setPage('home')}><ImpressumContent /></LegalPage>
   if (page === 'datenschutz') return <LegalPage title="Datenschutzerklärung" onBack={() => setPage('home')}><DatenschutzContent /></LegalPage>
+  if (page === 'gesundheit') return <LegalPage title="Gesundheitshinweis" onBack={() => setPage('home')}><GesundheitContent /></LegalPage>
 
   const openCoaching = () => setPage('coaching-form')
 
@@ -162,9 +163,13 @@ export default function App() {
             <a href="mailto:healthleticx@web.de" style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, textDecoration: 'none' }}>healthleticx@web.de</a>
             <button onClick={() => setPage('impressum')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Impressum</button>
             <button onClick={() => setPage('datenschutz')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Datenschutz</button>
+            <button onClick={() => setPage('gesundheit')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Gesundheitshinweis</button>
           </div>
-          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12 }}>© 2025 Healthletics</span>
+          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12 }}>© 2026 healthleticx</span>
         </div>
+        <p style={{ maxWidth: 1100, margin: '14px auto 0', color: 'rgba(255,255,255,0.3)', fontSize: 11, lineHeight: 1.6 }}>
+          Hinweis: Ich bin kein Arzt und mache keine Heilversprechen. Meine Inhalte und mein Coaching ersetzen keine medizinische Beratung, Diagnose oder Behandlung.
+        </p>
       </footer>
     </div>
   )
@@ -387,15 +392,24 @@ function LegalPage({ title, onBack, children }: { title: string; onBack: () => v
   )
 }
 
+const H2 = ({ children }: { children: React.ReactNode }) => <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>{children}</h2>
+
+// PLATZHALTER: Name und ladungsfähige Anschrift liefert Loris; nach Firmengründung Firmendaten (Rechtsform, Vertretung, Register, USt-IdNr.).
 function ImpressumContent() {
   return (
     <>
-      <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>Angaben gemäß § 5 TMG</h2>
-      <p>[Vorname Nachname]<br />[Straße Hausnummer]<br />[PLZ Ort]</p>
-      <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>Kontakt</h2>
+      <H2>Angaben gemäß § 5 DDG</H2>
+      <p>[Vorname Nachname]<br />healthleticx<br />[Straße Hausnummer]<br />[PLZ Ort]</p>
+      <H2>Kontakt</H2>
       <p>E-Mail: healthleticx@web.de</p>
-      <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>Haftungsausschluss</h2>
-      <p>Die Inhalte dieser Website dienen ausschließlich der allgemeinen Information sowie der Unterhaltung. Sie stellen keine medizinische oder therapeutische Beratung dar.</p>
+      <H2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</H2>
+      <p>[Vorname Nachname], Anschrift wie oben</p>
+      <H2>Verbraucherstreitbeilegung</H2>
+      <p>Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+      <H2>Haftung für Inhalte und Links</H2>
+      <p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt, für Richtigkeit, Vollständigkeit und Aktualität kann ich jedoch keine Gewähr übernehmen. Für verlinkte externe Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+      <H2>Gesundheitshinweis</H2>
+      <p>Die Inhalte dieser Website dienen der allgemeinen Information und Motivation. Sie stellen keine medizinische oder therapeutische Beratung dar und ersetzen keinen Arzt.</p>
     </>
   )
 }
@@ -403,14 +417,34 @@ function ImpressumContent() {
 function DatenschutzContent() {
   return (
     <>
-      <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>1. Datenschutz auf einen Blick</h2>
-      <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit deinen personenbezogenen Daten passiert, wenn du diese Website besuchst.</p>
-      <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>2. Datenerfassung</h2>
-      <p>Diese Website wird statisch über GitHub Pages gehostet. Es werden keine eigenen Cookies gesetzt und keine personenbezogenen Daten aktiv erfasst oder gespeichert.</p>
-      <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>3. Externe Links</h2>
-      <p>Diese Website enthält Links zu externen Plattformen (Instagram, TikTok, YouTube, WhatsApp, Telegram). Für deren Datenschutz sind deren Betreiber verantwortlich.</p>
-      <h2 style={{ color: '#fff', fontSize: 17, fontWeight: 700, marginBottom: 8, marginTop: 28 }}>4. Kontakt</h2>
-      <p>Bei Fragen zum Datenschutz: healthleticx@web.de</p>
+      <p>Stand: 22. Oktober 2026</p>
+      <H2>1. Verantwortlicher</H2>
+      <p>[Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: healthleticx@web.de</p>
+      <H2>2. Grundsätzliches</H2>
+      <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Schriften und alle Programmteile werden direkt von dieser Website geladen, nicht von Drittanbietern wie Google Fonts.</p>
+      <H2>3. Hosting (GitHub Pages)</H2>
+      <p>Die Website wird über GitHub Pages der GitHub B.V. (Amsterdam) bzw. GitHub, Inc. (USA) bereitgestellt. Beim Aufruf werden technisch notwendige Daten wie IP-Adresse, Zeitpunkt, aufgerufene Seite und Browserangaben verarbeitet, um die Seite auszuliefern und vor Missbrauch zu schützen. Eine Übermittlung in die USA ist möglich; GitHub ist nach dem EU-US Data Privacy Framework zertifiziert. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+      <H2>4. Coaching-Anfrage</H2>
+      <p>Das Anfrageformular öffnet dein eigenes E-Mail-Programm mit einer vorbereiteten Nachricht an healthleticx@web.de. Erst wenn du sie dort absendest, erhalte ich deine Angaben (Name, E-Mail, optional Telefon, Wunschzeiten, Nachricht). Ich nutze sie, um deine Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO), und lösche sie, wenn keine Zusammenarbeit zustande kommt, spätestens nach 6 Monaten. Bitte schicke keine Gesundheitsdaten wie Diagnosen oder Medikamente per E-Mail.</p>
+      <H2>5. Externe Links</H2>
+      <p>Links zu Instagram, TikTok, YouTube, WhatsApp und Telegram sind einfache Links. Erst beim Anklicken verlässt du diese Website; dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>
+      <H2>6. Deine Rechte</H2>
+      <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO). Beschweren kannst du dich bei einer Aufsichtsbehörde, z. B. beim Landesbeauftragten für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart.</p>
+    </>
+  )
+}
+
+function GesundheitContent() {
+  return (
+    <>
+      <H2>Keine medizinische Beratung</H2>
+      <p>Ich bin kein Arzt und mache keine Heilversprechen. Mein Coaching, meine Inhalte und die App HLX Together dienen der allgemeinen Information und Motivation. Sie sind keine Diagnose, Therapie oder medizinische Beratung und ersetzen nicht den Rat von Ärztin oder Arzt, Physiotherapie oder Ernährungsfachkraft.</p>
+      <H2>Bevor du startest</H2>
+      <p>Sprich bitte vorher mit deiner Ärztin oder deinem Arzt, wenn du Vorerkrankungen, Verletzungen, Schmerzen, eine Schwangerschaft, eine Essstörung oder Medikamente hast. Intervallfasten oder ein Kaloriendefizit sind nicht für alle geeignet, insbesondere nicht für Schwangere, Stillende, Menschen mit Essstörungen oder Untergewicht und Personen unter 18 Jahren.</p>
+      <H2>Ergebnisse sind individuell</H2>
+      <p>Wie sich Fitness, Gewicht oder Wohlbefinden verändern, hängt von vielen Faktoren ab. Beispiele und Erfahrungen anderer sind keine Garantie.</p>
+      <H2>Im Notfall</H2>
+      <p>Bei akuten Beschwerden wie Brustschmerz, Atemnot, Ohnmacht oder starker Blutung sofort den Notruf 112 wählen.</p>
     </>
   )
 }
