@@ -26,7 +26,7 @@ function slide({ n, total = 5, kicker, title, sub, chips = [], ph, tilt = -4 }) 
 export default async function endnutzer(cfg) {
   const url = link(cfg, 'endnutzer');
   const A = [];
-  const S = '01_Endnutzer/Social', P = '01_Endnutzer/Druck';
+  const S = '01_Endnutzer/Social/Allgemein', P = '01_Endnutzer/Druck';
 
   // ---------- Karussell 4:5 ----------
   const slides = [

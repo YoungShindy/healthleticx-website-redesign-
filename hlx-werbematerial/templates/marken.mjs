@@ -9,7 +9,7 @@ export default async function marken(cfg) {
       <div class="wide" style="font-size:12.5pt;margin-top:4mm">${t}</div>
       <div class="m" style="font-size:9.5pt;line-height:1.45;margin-top:1.5mm">${d}</div></div>`;
 
-  A.push({ dir: '04_Marken-Firmen', name: 'MRK-Partnerschaften-A4', pdf: true, html: printDoc(210, 297, 3, [`
+  A.push({ dir: '04_Marken-Firmen/A_Akquise-zum-Verschicken', name: 'MRK-Partnerschaften-A4', pdf: true, html: printDoc(210, 297, 3, [`
     <div style="position:absolute;inset:0;background:${C.ground}"></div>
     <div style="position:absolute;left:0;right:0;top:0;height:120mm" class="bg"></div>
     ${plates(C.yellow, .07, 'right:-60mm;top:-10mm;height:150mm')}
@@ -48,7 +48,7 @@ export default async function marken(cfg) {
       ${ph ? phone(ph, `position:absolute;height:${h * 0.72}px;width:auto;right:${w * 0.07}px;top:${h * 0.14}px;transform:rotate(4deg)`) : ''}
       <div class="row" style="position:absolute;left:${w * 0.07}px;bottom:${h * 0.07}px;gap:${w * 0.02}px;font-size:${h * 0.026}px;font-weight:600"><span class="pill" style="padding:${h * 0.018}px ${h * 0.035}px">Partner werden</span><span class="m">${cfg.email}</span></div>
     </div>`);
-  A.push({ dir: '04_Marken-Firmen/Social', name: 'MRK-LinkedIn-Post_1200x1200', w: 1200, h: 1200, html: social(1200, 1200, `Gesündere Teams.<br><span class="y">Mit ${cfg.appName}.</span>`, 'Training, Ernährung und Routinen in einer App. Für Mitarbeitende, Kundschaft und Community.', 1) });
-  A.push({ dir: '04_Marken-Firmen/Social', name: 'MRK-LinkedIn-Banner_1200x627', w: 1200, h: 627, html: social(1200, 627, `Gesundheit, die bleibt.<br><span class="y">Gemeinsam.</span>`, `Corporate Health, Kooperationen und Kampagnen mit ${cfg.brand}.`, 3) });
+  A.push({ dir: '04_Marken-Firmen/C_HLX-eigene-Kanaele', name: 'MRK-LinkedIn-Post_1200x1200', w: 1200, h: 1200, html: social(1200, 1200, `Gesündere Teams.<br><span class="y">Mit ${cfg.appName}.</span>`, 'Training, Ernährung und Routinen in einer App. Für Mitarbeitende, Kundschaft und Community.', 1) });
+  A.push({ dir: '04_Marken-Firmen/C_HLX-eigene-Kanaele', name: 'MRK-LinkedIn-Banner_1200x627', w: 1200, h: 627, html: social(1200, 627, `Gesundheit, die bleibt.<br><span class="y">Gemeinsam.</span>`, `Corporate Health, Kooperationen und Kampagnen mit ${cfg.brand}.`, 3) });
   return A;
 }

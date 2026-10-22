@@ -7,13 +7,22 @@ Werbemittel für **HLX Together** von **healthleticx**, getrennt nach Zielgruppe
 | Ordner | Für wen | Kürzel | Inhalt |
 |---|---|---|---|
 | `00_Marke` | alle | BRD | Logos (SVG + PNG transparent), App-Icon, „powered by HLX“-Badges, Markenblatt A4 |
-| `01_Endnutzer` | Klienten / Nutzer | END | Instagram-Karussell (5), Posts (2), Stories (3), Flyer A5, Postkarte A6, Plakat A3 |
-| `02_Influencer` | Creator | INF | 6 Story-Vorlagen + 2 Feed-Vorlagen, je **fertig** und als **transparentes Overlay**; Creator-Briefing A4 |
-| `03_Gyms-Studios` | Studios, Gyms | GYM | QR-Aufsteller A6 + A5, Tischaufsteller zum Falten, QR-Sticker 80 mm, Plakat A3, Partnerinfo A4, Social; jeweils generisch und mit Partner-Logo (Co-Branding) |
-| `04_Marken-Firmen` | Marken, Unternehmen | MRK | Partnerschafts-Onepager A4, LinkedIn-Post + Banner |
-| `05_Coaches` | zukünftige Coaches | COA | Info-Onepager A4, 2 Feed-Posts, 1 Story |
+| `01_Endnutzer` | Klienten / Nutzer | END | `Social/Allgemein` (Karussell, Posts, Stories), `Social/App-Werbung` („Was ist HLX Together?“, Steckbrief), `Social/Nischen` (8 Zielgruppen je Story + Post), `Druck` (Flyer, Postkarte, Plakat) |
+| `02_Influencer` | Creator | INF | 6 Stories + 2 Feed-Vorlagen, je fertig und transparent; Creator-Briefing |
+| `03_Gyms-Studios` | Studios, Gyms | GYM | QR-Aufsteller, Tischaufsteller, Sticker, Plakat, Partnerinfo, Social inkl. „Offizielles Partner-Studio“; generisch + Co-Branding |
+| `04_Marken-Firmen` | Unternehmen, Marken | MRK | `A_Akquise-zum-Verschicken`, `B_Fuer-Partner-Firmen` („Offizieller Partner“), `C_HLX-eigene-Kanaele` („Wir suchen Partner“, LinkedIn) |
+| `05_Coaches` | Coaches | COA | `A_Akquise-zum-Verschicken`, `B_Fuer-Partner-Coaches` („Offizieller Partner-Coach“ inkl. Foto-Overlay), `C_HLX-eigene-Kanaele` („Wir suchen Coaches“) |
 
-Jeder Dateiname beginnt mit dem Kürzel. Druckdateien tragen unten klein einen Referenzcode (z. B. `HLX-GYM-A6`), damit man später zuordnen kann, woher ein Kontakt kam.
+Jeder Dateiname beginnt mit dem Kürzel. Druckdateien tragen unten klein einen Referenzcode (z. B. `HLX-GYM-A6`).
+
+### Bearbeitbare Dateien (PPTX)
+
+Neben jeder Social-Vorlage und jedem Co-Branding-Aufsteller liegt im Unterordner `Bearbeitbar-PPTX` eine PowerPoint-Datei. Darin sind alle Texte echte Textfelder; gelb gestrichelte Felder („Dein Logo hier einfügen“) sind für Logo oder Foto des Partners. Öffnen in Canva (Datei hochladen), PowerPoint, Keynote oder Google Slides. Schrift: Archivo / Archivo Black (Google Fonts).
+
+### Versandpakete
+
+`npm run build` legt in `versand/` je Empfänger ein ZIP mit LIESMICH.txt an (wird nicht ins Repo committet, jederzeit neu erzeugbar):
+Endnutzer-Werbung, Influencer, Gym-Studio-Partner, Firmen-Akquise, Firmen-Partner, Coach-Akquise, Partner-Coach, HLX-eigene-Kanäle, Komplett.
 
 ## Domain, Links, Kontakt ändern
 
@@ -33,7 +42,7 @@ npm run build          # alles
 node build.mjs gym     # nur Dateien, deren Pfad "gym" enthält
 ```
 
-Benötigt Node 18+ und Chromium (Playwright).
+Benötigt Node 18+, Chromium (Playwright), `zip` und `pdftoppm` (poppler).
 
 **Empfehlung für QR-Codes:** Vor dem Druck eine eigene Weiterleitungs-Adresse anlegen (z. B. `deine-domain.de/app`) und diese in `links` eintragen. Dann bleiben gedruckte Codes gültig, auch wenn sich das Ziel (App Store, Web-App, Landingpage) später ändert.
 
@@ -57,7 +66,8 @@ Benötigt Node 18+ und Chromium (Playwright).
 ```
 config.json         Domain, Links, Kontakt, Partner
 build.mjs           erzeugt ausgabe/
-templates/          ein Modul pro Zielgruppe + lib.mjs (Logo, Farben, Icons, QR)
+templates/          ein Modul pro Zielgruppe, kampagnen.mjs (App-Werbung, Nischen, Partner, Recruiting), lib.mjs
 assets/             Schrift, App-Screenshots
-ausgabe/            fertige Dateien + index.html (Übersicht)
+ausgabe/            fertige Dateien, PPTX + index.html (Übersicht)
+versand/            ZIP-Pakete pro Empfänger (nicht im Repo)
 ```

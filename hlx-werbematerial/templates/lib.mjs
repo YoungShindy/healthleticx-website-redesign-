@@ -98,6 +98,7 @@ body{font-family:Archivo,Arial,sans-serif;color:${C.text};-webkit-font-smoothing
 .ghost{background:transparent;border:2px solid rgba(238,243,238,.28);color:${C.text}}
 .row{display:flex;align-items:center}
 .col{display:flex;flex-direction:column}
+.po{visibility:hidden}
 .ref{position:absolute;font-size:6.5pt;color:rgba(169,194,186,.6);letter-spacing:.06em}
 ${extra}`;
 

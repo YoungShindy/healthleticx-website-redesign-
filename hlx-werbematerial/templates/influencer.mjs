@@ -30,7 +30,7 @@ export default async function influencer(cfg) {
     ${linkHint(1250)}
     <div class="row" style="position:absolute;left:70px;right:70px;top:1470px;justify-content:center;gap:24px">
       <span style="font-size:34px;font-weight:700">Mein Code:</span>
-      <span style="display:inline-block;width:420px;height:92px;border-radius:20px;background:${C.yellow}"></span>
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:420px;height:92px;border-radius:20px;background:${C.yellow};color:${C.ground};font-size:46px;font-weight:850"><span class="po">DEINCODE</span></span>
     </div>
     ${brandFoot()}`, phone(1, 'position:absolute;width:440px;left:320px;top:700px;clip-path:inset(0 0 52% 0)'));
 
@@ -71,7 +71,7 @@ export default async function influencer(cfg) {
   pair(A, ST, 'INF-Story-6-MeinCode', 1080, 1920, `
     ${top(cfg.appName, 'Mein Code<br><span class="y">für dich.</span>')}
     <div class="col" style="position:absolute;left:70px;right:70px;top:1080px;align-items:center;gap:26px">
-      <div style="width:100%;height:190px;border-radius:36px;background:${C.yellow};box-shadow:0 0 0 10px rgba(255,255,0,.18)"></div>
+      <div style="width:100%;height:190px;border-radius:36px;background:${C.yellow};box-shadow:0 0 0 10px rgba(255,255,0,.18);display:flex;align-items:center;justify-content:center;color:${C.ground}"><span class="po disp" style="font-size:96px">DEINCODE</span></div>
       <p style="font-size:34px;font-weight:600;text-align:center">Kostenlos starten. Alle Details im Link.</p>
     </div>
     ${linkHint(1430)}

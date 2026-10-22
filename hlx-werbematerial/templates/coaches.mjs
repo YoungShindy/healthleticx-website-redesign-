@@ -8,7 +8,7 @@ export default async function coaches(cfg) {
       <div style="width:12mm;height:12mm;border-radius:3mm;background:${C.surface};display:flex;align-items:center;justify-content:center">${icon(ic, 26, C.yellow)}</div>
       <div><div class="wide" style="font-size:12pt">${t}</div><div class="m" style="font-size:9.5pt;line-height:1.4;margin-top:.8mm">${d}</div></div></div>`;
 
-  A.push({ dir: '05_Coaches', name: 'COA-Info-A4_fuer-Coaches', pdf: true, html: printDoc(210, 297, 3, [`
+  A.push({ dir: '05_Coaches/A_Akquise-zum-Verschicken', name: 'COA-Info-A4_fuer-Coaches', pdf: true, html: printDoc(210, 297, 3, [`
     <div style="position:absolute;inset:0;background:${C.ground}"></div>
     <div style="position:absolute;left:0;right:0;top:0;height:120mm" class="bg"></div>
     ${plates(C.yellow, .07, 'right:-60mm;top:-10mm;height:150mm')}
@@ -38,7 +38,7 @@ export default async function coaches(cfg) {
     </div>
     <div class="ref" style="right:9mm;bottom:5mm">HLX-COA-B01</div>`]) });
 
-  const S = '05_Coaches/Social';
+  const S = '05_Coaches/C_HLX-eigene-Kanaele';
   const feed = (kick, title, sub, ph) => doc(`
     <div class="bg" style="width:1080px;height:1350px;position:relative;overflow:hidden">
       ${plates(C.yellow, .07, 'right:-260px;top:120px;height:1250px')}

@@ -7,9 +7,9 @@ const partnerMark = (p, k) => {
   if (p.logo && fs.existsSync(p.logo)) {
     const data = fs.readFileSync(p.logo).toString('base64');
     const mime = p.logo.endsWith('.svg') ? 'image/svg+xml' : p.logo.endsWith('.png') ? 'image/png' : 'image/jpeg';
-    return `<img src="data:${mime};base64,${data}" style="height:${12 * k}mm;max-width:${50 * k}mm;object-fit:contain">`;
+    return `<img class="slot" data-slot="Euer Logo" src="data:${mime};base64,${data}" style="height:${12 * k}mm;max-width:${50 * k}mm;object-fit:contain">`;
   }
-  return `<div class="wide" style="font-size:${13 * k}pt;padding:${2.2 * k}mm ${4 * k}mm;border:${0.5 * k}mm solid rgba(238,243,238,.5);border-radius:${2 * k}mm;text-transform:uppercase;letter-spacing:.06em">${p.name}</div>`;
+  return `<div class="wide slot" data-slot="Euer Logo" style="font-size:${13 * k}pt;padding:${2.2 * k}mm ${4 * k}mm;border:${0.5 * k}mm solid rgba(238,243,238,.5);border-radius:${2 * k}mm;text-transform:uppercase;letter-spacing:.06em">${p.name}</div>`;
 };
 
 export default async function gyms(cfg) {
@@ -23,7 +23,7 @@ export default async function gyms(cfg) {
   for (const [fmt, w, h] of [['A6', 105, 148], ['A5', 148, 210]]) {
     const k = w / 105;
     for (const { suffix, p } of variants) {
-      A.push({ dir: D, name: `GYM-QR-Aufsteller-${fmt}-hoch${suffix}_3mm-Beschnitt`, pdf: true, html: printDoc(w, h, 3, [`
+      A.push({ dir: D, name: `GYM-QR-Aufsteller-${fmt}-hoch${suffix}_3mm-Beschnitt`, pdf: true, editable: !!p, html: printDoc(w, h, 3, [`
         <div class="bg" style="position:absolute;inset:0"></div>
         ${plates(C.yellow, .07, `right:${-40 * k}mm;top:${10 * k}mm;height:${140 * k}mm`)}
         <div class="safe col" style="align-items:center;text-align:center;inset:${9 * k}mm">
@@ -130,7 +130,7 @@ export default async function gyms(cfg) {
 
   // ---------- Social für Studios ----------
   for (const { suffix, p } of variants) {
-    const head = p ? `<div class="row" style="position:absolute;left:0;right:0;top:230px;justify-content:center;gap:28px"><div class="wide" style="font-size:40px;padding:14px 28px;border:3px solid rgba(238,243,238,.5);border-radius:16px;text-transform:uppercase;letter-spacing:.06em">${p.name}</div><span class="m" style="font-size:40px">×</span>${logo(C.yellow, 'height:50px')}</div>`
+    const head = p ? `<div class="row" style="position:absolute;left:0;right:0;top:230px;justify-content:center;gap:28px"><div class="wide slot" data-slot="Euer Logo" style="font-size:40px;padding:14px 28px;border:3px solid rgba(238,243,238,.5);border-radius:16px;text-transform:uppercase;letter-spacing:.06em">${p.name}</div><span class="m" style="font-size:40px">×</span>${logo(C.yellow, 'height:50px')}</div>`
       : `<div style="position:absolute;left:0;right:0;top:230px;display:flex;justify-content:center">${logo(C.yellow, 'height:56px')}</div>`;
     A.push({ dir: S, name: `GYM-Story-NeuBeiUns${suffix}_1080x1920`, w: 1080, h: 1920, html: doc(`
       <div class="bg" style="width:1080px;height:1920px;position:relative;overflow:hidden">
