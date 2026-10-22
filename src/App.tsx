@@ -160,7 +160,7 @@ export default function App() {
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <HLXLogo size={26} />
           <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-            <a href="mailto:healthleticx@web.de" style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, textDecoration: 'none' }}>healthleticx@web.de</a>
+            <a href="mailto:info@healthleticx.de" style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, textDecoration: 'none' }}>info@healthleticx.de</a>
             <button onClick={() => setPage('impressum')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Impressum</button>
             <button onClick={() => setPage('datenschutz')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Datenschutz</button>
             <button onClick={() => setPage('gesundheit')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Gesundheitshinweis</button>
@@ -202,7 +202,7 @@ function CoachingForm({ onBack }: { onBack: () => void }) {
     setStatus('sending')
     try {
       const body = `Name: ${name}\nE-Mail: ${email}\nTelefon: ${phone || 'nicht angegeben'}\n\nVerfügbare Zeiten:\n${slots.join('\n')}\n\nNachricht:\n${message}`
-      window.location.href = `mailto:healthleticx@web.de?subject=Coaching-Anfrage von ${encodeURIComponent(name)}&body=${encodeURIComponent(body)}`
+      window.location.href = `mailto:info@healthleticx.de?subject=Coaching-Anfrage von ${encodeURIComponent(name)}&body=${encodeURIComponent(body)}`
       setStatus('sent')
     } catch {
       setStatus('error')
@@ -401,7 +401,7 @@ function ImpressumContent() {
       <H2>Angaben gemäß § 5 DDG</H2>
       <p>[Vorname Nachname]<br />healthleticx<br />[Straße Hausnummer]<br />[PLZ Ort]</p>
       <H2>Kontakt</H2>
-      <p>E-Mail: healthleticx@web.de</p>
+      <p>E-Mail: info@healthleticx.de</p>
       <H2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</H2>
       <p>[Vorname Nachname], Anschrift wie oben</p>
       <H2>Verbraucherstreitbeilegung</H2>
@@ -419,13 +419,13 @@ function DatenschutzContent() {
     <>
       <p>Stand: 22. Oktober 2026</p>
       <H2>1. Verantwortlicher</H2>
-      <p>[Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: healthleticx@web.de</p>
+      <p>[Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: info@healthleticx.de</p>
       <H2>2. Grundsätzliches</H2>
       <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Schriften und alle Programmteile werden direkt von dieser Website geladen, nicht von Drittanbietern wie Google Fonts.</p>
-      <H2>3. Hosting (GitHub Pages)</H2>
-      <p>Die Website wird über GitHub Pages der GitHub B.V. (Amsterdam) bzw. GitHub, Inc. (USA) bereitgestellt. Beim Aufruf werden technisch notwendige Daten wie IP-Adresse, Zeitpunkt, aufgerufene Seite und Browserangaben verarbeitet, um die Seite auszuliefern und vor Missbrauch zu schützen. Eine Übermittlung in die USA ist möglich; GitHub ist nach dem EU-US Data Privacy Framework zertifiziert. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+      <H2>3. Hosting (Cloud86)</H2>
+      <p>Die Website liegt auf einem Server der Cloud86 B.V. (Lavendelheide 21-108, 9202 PD Drachten, Niederlande), der in meinem Auftrag tätig ist (Auftragsverarbeitung nach Art. 28 DSGVO). Der Server steht in den Niederlanden, eine Übermittlung in Drittländer findet nicht statt. Beim Aufruf werden technisch notwendige Daten wie IP-Adresse, Datum und Uhrzeit, aufgerufene Seite und Browserangaben verarbeitet und in Server-Logdateien gespeichert, um die Website auszuliefern und vor Missbrauch zu schützen. Die Logdateien werden regelmäßig rotiert und gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren, funktionierenden Website).</p>
       <H2>4. Coaching-Anfrage</H2>
-      <p>Das Anfrageformular öffnet dein eigenes E-Mail-Programm mit einer vorbereiteten Nachricht an healthleticx@web.de. Erst wenn du sie dort absendest, erhalte ich deine Angaben (Name, E-Mail, optional Telefon, Wunschzeiten, Nachricht). Ich nutze sie, um deine Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO), und lösche sie, wenn keine Zusammenarbeit zustande kommt, spätestens nach 6 Monaten. Bitte schicke keine Gesundheitsdaten wie Diagnosen oder Medikamente per E-Mail.</p>
+      <p>Das Anfrageformular öffnet dein eigenes E-Mail-Programm mit einer vorbereiteten Nachricht an info@healthleticx.de. Erst wenn du sie dort absendest, erhalte ich deine Angaben (Name, E-Mail, optional Telefon, Wunschzeiten, Nachricht). Ich nutze sie, um deine Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO), und lösche sie, wenn keine Zusammenarbeit zustande kommt, spätestens nach 6 Monaten. Bitte schicke keine Gesundheitsdaten wie Diagnosen oder Medikamente per E-Mail.</p>
       <H2>5. Externe Links</H2>
       <p>Links zu Instagram, TikTok, YouTube, WhatsApp und Telegram sind einfache Links. Erst beim Anklicken verlässt du diese Website; dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>
       <H2>6. Deine Rechte</H2>
@@ -455,5 +455,5 @@ const SOCIALS = [
   { label: 'YouTube', handle: '@healthleticx', icon: '▶', color: '#ff0000', url: 'https://www.youtube.com/@healthleticx' },
   { label: 'WhatsApp Community', handle: 'Kostenlos beitreten', icon: '💬', color: '#25d366', url: 'https://whatsapp.com/channel/0029VbCZ3Jx0VycHkB8WfZ1o' },
   { label: 'Telegram', handle: 't.me/healthleticx', icon: '✈', color: '#0088cc', url: 'https://t.me/healthleticx' },
-  { label: 'E-Mail', handle: 'healthleticx@web.de', icon: '✉', color: GM, url: 'mailto:healthleticx@web.de' },
+  { label: 'E-Mail', handle: 'info@healthleticx.de', icon: '✉', color: GM, url: 'mailto:info@healthleticx.de' },
 ]
