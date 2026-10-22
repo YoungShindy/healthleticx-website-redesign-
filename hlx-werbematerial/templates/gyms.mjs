@@ -23,7 +23,7 @@ export default async function gyms(cfg) {
   for (const [fmt, w, h] of [['A6', 105, 148], ['A5', 148, 210]]) {
     const k = w / 105;
     for (const { suffix, p } of variants) {
-      A.push({ dir: D, name: `GYM-QR-Aufsteller-${fmt}-hoch${suffix}_3mm-Beschnitt`, pdf: true, editable: !!p, html: printDoc(w, h, 3, [`
+      A.push({ dir: D, name: `GYM-QR-Aufsteller-${fmt}-hoch${suffix}_3mm-Beschnitt`, pdf: true, html: printDoc(w, h, 3, [`
         <div class="bg" style="position:absolute;inset:0"></div>
         ${plates(C.yellow, .07, `right:${-40 * k}mm;top:${10 * k}mm;height:${140 * k}mm`)}
         <div class="safe col" style="align-items:center;text-align:center;inset:${9 * k}mm">

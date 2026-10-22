@@ -55,18 +55,16 @@ for (const a of todo) {
     await page.setViewportSize({ width: a.w, height: a.h });
     await page.screenshot({ path: path.join(dir, `${a.name}.png`), omitBackground: !!a.transparent, clip: { x: 0, y: 0, width: a.w, height: a.h } });
   }
-  // Bearbeitbare PPTX: alle Social-Bilder (außer transparente Overlays und Logos) und markierte Druckdateien
-  const editable = a.editable ?? (!a.pdf && !a.transparent && !a.dir.startsWith('00_Marke'));
+  // Bearbeitbare PPTX: alle Social-Bilder und Druckdateien (außer transparente Overlays, Logos, Falz-Aufsteller)
+  const editable = a.editable ?? (!a.transparent && !a.name.includes('Tischaufsteller') && (a.pdf || !a.dir.startsWith('00_Marke')));
   if (editable) {
-    let pg = page, w = a.w, h = a.h;
+    let pg = page, w = a.w, h = a.h, pages = 1;
     if (a.pdf) {
-      [w, h] = (await page.evaluate(() => { const r = document.querySelector('.page').getBoundingClientRect(); return [r.width, r.height]; })).map(Math.round);
+      [w, h, pages] = (await page.evaluate(() => { const r = document.querySelector('.page').getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height), document.querySelectorAll('.page').length]; }));
       pg = hiPage;
       await pg.setViewportSize({ width: w, height: h });
-      await pg.goto(url);
-      await pg.evaluate(() => document.fonts.ready);
     }
-    await exportPptx(pg, w, h, path.join(dir, 'Bearbeitbar-PPTX'), a.name);
+    await exportPptx(pg, url, w, h, pages, path.join(dir, 'Bearbeitbar-PPTX'), a.name);
     pptxCount++;
   }
   console.log('  ', a.dir, a.name);
@@ -78,7 +76,20 @@ fs.rmSync(TMP, { recursive: true, force: true });
 console.log(`\n${todo.length} Dateien + ${pptxCount} PPTX erzeugt in ausgabe/${filter ? '' : ', Pakete in versand/'}`);
 
 // Texte als echte Textfelder, Rest als Hintergrundbild, .slot als markiertes Logo-/Foto-Feld.
-async function exportPptx(pg, W, H, outDir, name) {
+async function exportPptx(pg, url, W, H, pages, outDir, name) {
+  const inch = px => px / 96;
+  const hex = c => c.match(/\d+(\.\d+)?/g).map(Number).slice(0, 3).map(v => Math.round(v).toString(16).padStart(2, '0')).join('').toUpperCase();
+  const pptx = new PptxGenJS();
+  pptx.defineLayout({ name: 'HLX', width: inch(W), height: inch(H) });
+  pptx.layout = 'HLX';
+  pptx.author = cfg.brand;
+  pptx.title = name;
+  fs.mkdirSync(outDir, { recursive: true });
+  for (let i = 0; i < pages; i++) {
+  await pg.goto(url);
+  await pg.evaluate(() => document.fonts.ready);
+  // Mehrseitige Druckdateien: jeweils nur Seite i zeigen
+  await pg.evaluate(i => document.querySelectorAll('.page').forEach((p, j) => { if (j !== i) p.style.display = 'none'; }), i);
   const data = await pg.evaluate(() => {
     document.querySelectorAll('.po').forEach(e => { e.style.visibility = 'visible'; });
     const hasText = el => [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
@@ -123,17 +134,8 @@ async function exportPptx(pg, W, H, outDir, name) {
     document.head.appendChild(st);
     return { texts, slots };
   });
-  fs.mkdirSync(outDir, { recursive: true });
-  const bg = path.join(TMP, `${name}_bg.png`);
+  const bg = path.join(TMP, `${name}_bg${i}.png`);
   await pg.screenshot({ path: bg, clip: { x: 0, y: 0, width: W, height: H } });
-
-  const inch = px => px / 96;
-  const hex = c => c.match(/\d+(\.\d+)?/g).map(Number).slice(0, 3).map(v => Math.round(v).toString(16).padStart(2, '0')).join('').toUpperCase();
-  const pptx = new PptxGenJS();
-  pptx.defineLayout({ name: 'HLX', width: inch(W), height: inch(H) });
-  pptx.layout = 'HLX';
-  pptx.author = cfg.brand;
-  pptx.title = name;
   const slide = pptx.addSlide();
   slide.addImage({ path: bg, x: 0, y: 0, w: inch(W), h: inch(H) });
 
@@ -165,6 +167,7 @@ async function exportPptx(pg, W, H, outDir, name) {
       fill: { color: 'FFFFFF', transparency: 85 }, line: { color: 'FFFF00', width: 1.5, dashType: 'dash' },
       align: 'center', valign: 'middle', fontFace: 'Archivo', fontSize: Math.max(7, Math.min(20, s.h * 0.75 * 0.22)), color: 'FFFF00', bold: true,
     });
+  }
   }
   await pptx.writeFile({ fileName: path.join(outDir, `${name}.pptx`) });
 }
