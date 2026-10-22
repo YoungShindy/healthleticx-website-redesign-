@@ -1,0 +1,15 @@
+{
+  "name": "hlx-werbematerial",
+  "version": "1.0.0",
+  "description": "HLX Together Werbematerial-Kit",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  },
+  "private": true
+}

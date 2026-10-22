@@ -1,0 +1,25 @@
+{
+  "_hinweis": "Alles, was sich noch ändern kann, steht hier. Nach jeder Änderung: npm run build. Platzhalter {base} wird durch baseUrl ersetzt.",
+
+  "baseUrl": "https://justinkaram14.github.io/healthleticx-website/",
+
+  "links": {
+    "endnutzer":  "{base}?ref=app",
+    "gym":        "{base}?ref=gym",
+    "marken":     "{base}kontakt/?ref=partner",
+    "coaches":    "{base}kontakt/?ref=coach",
+    "influencer": "{base}?ref=creator"
+  },
+
+  "urlText": "",
+
+  "appName": "HLX Together",
+  "brand": "healthleticx",
+  "claim": "Healthy & Athletic",
+  "handle": "@healthleticx",
+  "email": "healthleticx@web.de",
+
+  "partners": [
+    { "id": "beispiel", "name": "Dein Studio", "logo": "" }
+  ]
+}
