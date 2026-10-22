@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages
 
+# Abgeschaltet: healthleticx läuft nur noch über die eigene Domain (Hosting Cloud86).
+# Nur noch von Hand startbar; base in vite.config.ts steht jetzt auf '/'.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
