@@ -144,14 +144,14 @@ function HomePage() {
           <div className="two-col">
             <div>
               <SLabel>Die Story</SLabel>
-              <h2 id="about-h" style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5 }}>Warum Healthletics?</h2>
+              <h2 id="about-h" style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5 }}>Warum healthleticx?</h2>
             </div>
             <div>
               <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, marginBottom: 18 }}>
-                Healthletics steht für ein gesundes Leben ohne Kompromisse. Sport, Ernährung, mentale Gesundheit: Das gehört für uns zusammen.
+                healthleticx steht für ein gesundes Leben ohne Kompromisse. Sport, Ernährung, mentale Gesundheit: Für mich gehört das zusammen.
               </p>
               <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.85 }}>
-                Auf Instagram, TikTok und YouTube teilen wir regelmäßig ehrlichen Content. Keine gefilterte Traumwelt. Nur das, was sich für uns im Alltag bewährt hat.
+                Auf Instagram, TikTok und YouTube teile ich regelmäßig ehrlichen Content. Keine gefilterte Traumwelt. Nur das, was sich für mich im Alltag bewährt hat.
               </p>
             </div>
           </div>
@@ -329,7 +329,7 @@ function CoachingForm() {
             <div>
               <label htmlFor="f-message" style={label}>Was möchtest du besprechen? (optional)</label>
               <textarea id="f-message" name="message" aria-describedby="f-message-hint" style={{ ...input, minHeight: 100, resize: 'vertical' }} placeholder="Deine Ziele, Fragen, wie viel Zeit du hast ..." value={message} onChange={e => setMessage(e.target.value)} />
-              <p id="f-message-hint" style={hint}>Bitte keine Gesundheitsdaten wie Diagnosen, Verletzungen oder Medikamente. Das besprechen wir, falls nötig, im Gespräch.</p>
+              <p id="f-message-hint" style={hint}>Bitte keine Gesundheitsdaten wie Diagnosen, Verletzungen oder Medikamente. Falls das wichtig ist, frage ich im Gespräch danach.</p>
             </div>
 
             <button type="submit" style={{ background: Y, color: GD, padding: '15px', borderRadius: 10, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer' }}>

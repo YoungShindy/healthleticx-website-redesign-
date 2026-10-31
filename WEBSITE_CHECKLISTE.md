@@ -4,7 +4,7 @@ Geprüft: der gesamte Code (`index.html`, `src/App.tsx`, `src/index.css`, `src/m
 
 Legende: ✅ in Ordnung · 🔧 in diesem Commit behoben · ⚠️ offen, braucht eine Entscheidung oder Angaben von euch · ❌ fehlt, muss vor dem Livegang erledigt werden
 
-> Das ist eine technische und inhaltliche Vorprüfung, **keine Rechtsberatung**. Impressum, Datenschutz und künftige AGB/Widerrufsbelehrung vor dem Livegang anwaltlich prüfen lassen (siehe `CLAUDE.md`).
+> Das ist eine technische und inhaltliche Vorprüfung, **keine Rechtsberatung**. Impressum und Datenschutz vor dem Livegang anwaltlich prüfen lassen (siehe `CLAUDE.md`).
 
 ## Übersicht
 
@@ -18,16 +18,16 @@ Legende: ✅ in Ordnung · 🔧 in diesem Commit behoben · ⚠️ offen, brauch
 | 6 | Google Fonts lokal | ✅ | Inter kommt über `@fontsource` aus dem eigenen Build, keine Google-Anfrage |
 | 7 | Tracking | ✅ | Kein Analytics, keine Pixel, keine externen Anfragen (im Browser gemessen) |
 | 8 | Fake-Bewertungen | ✅ | Es gibt keine Bewertungen oder Testimonials auf der Seite |
-| 9 | AGB | ⚠️ | Fehlt. Nötig, sobald Coaching verkauft wird |
+| 9 | AGB | ✅ | Hier nicht nötig: Auf dieser Seite wird nichts verkauft, das Coaching läuft über eine andere Website |
 | 10 | Embeds | ✅ | Keine iframes, Videos oder Social-Widgets, nur einfache Links |
 | 11 | Cookie-Banner | ✅ | Nicht nötig: keine Cookies, kein localStorage, kein Tracking |
 | 12 | Unbelegte Aussagen | 🔧 | „echte Ergebnisse“, „was wirklich funktioniert“, „täglich“ und „innerhalb von 24 Stunden“ entschärft |
 | 13 | Barrierefreiheit | 🔧 | Fokusrahmen, Sprunglink, Landmarks, Label, Fokus beim Seitenwechsel. axe: 0 Verstöße auf allen Seiten |
 | 14 | Eindeutige Button-Texte | 🔧 | „Coaching“, „Jetzt starten“ → „Erstgespräch anfragen“; „Anfrage senden“ → „E-Mail-Anfrage vorbereiten“ |
-| 15 | Widerruf/Erstattung | ❌ | Fehlt. Bei Fernabsatz an Verbraucher ist eine Widerrufsbelehrung Pflicht |
+| 15 | Widerruf/Erstattung | ✅ ⚠️ | Hier nicht nötig. Achtung, wenn im Erstgespräch selbst verkauft wird |
 | 16 | Bildrechte | ✅ ⚠️ | Keine Fotos; Logo ist eigenes SVG. Das Vite-Standard-Favicon wurde ersetzt |
 | 17 | Datensparsamkeit | ✅ 🔧 | Pflicht sind nur Name, E-Mail und eine Wunschzeit; neu ist der Hinweis „keine Gesundheitsdaten“ |
-| 18 | Lokale Gesetze | ⚠️ | Siehe Abschnitt unten, vor allem **FernUSG** |
+| 18 | Lokale Gesetze | ⚠️ | Siehe Abschnitt unten. FernUSG betrifft die Verkaufsseite |
 | 19 | Formulare per Tastatur | 🔧 | Unsichtbarer Fokus behoben, `fieldset`/`legend`, Fehlermeldung statt gesperrtem Button |
 | 20 | Weitere Risiken | ⚠️ | Siehe Abschnitt unten |
 
@@ -95,7 +95,8 @@ Gemessen auf dem Hintergrund `#0e1c13` (bzw. `#1c3525` in der Coaching-Box):
 ⚠️ Wenn ihr später welche einbaut: nur echte, belegbare Bewertungen mit schriftlicher Freigabe. Bei Vorher/Nachher braucht ihr eine Einwilligung zum Bild (§ 22 KUG, Art. 9 DSGVO) und den Hinweis „Ergebnisse sind individuell“. Seit 2022 muss außerdem angegeben werden, **ob und wie** geprüft wird, dass Bewertungen echt sind (§ 5b Abs. 3 UWG).
 
 ### 9. AGB
-⚠️ Nicht vorhanden. Solange die Website nur eine unverbindliche Anfrage auslöst, sind AGB nicht zwingend. Sobald ihr Coaching verkauft (Preise, Laufzeit, Zahlung, Kündigung, Ausfallregeln), solltet ihr AGB haben. Pflichtangaben für Verbraucherverträge stehen in Art. 246a EGBGB. Zusammen mit Punkt 15 und dem FernUSG (unten) anwaltlich erstellen lassen.
+✅ **Für diese Website nicht nötig.** Hier wird nichts verkauft: Die Seite wirbt für das Coaching und nimmt nur Anfragen für ein **kostenloses** Erstgespräch an. Das Coaching wird über eine andere Website verkauft, und **dort** gehören AGB, Preise und Bestellprozess hin.
+⚠️ Wenn ihr von hier auf die Verkaufsseite verlinkt: einfacher Link genügt. Preise, die ihr hier nennt, müssen mit der Verkaufsseite übereinstimmen und Gesamtpreise inkl. USt sein (PAngV).
 
 ### 10. Embeds
 ✅ Keine eingebetteten Inhalte. Instagram, TikTok, YouTube, WhatsApp und Telegram sind einfache Links ohne Datenübertragung vor dem Klick.
@@ -108,8 +109,8 @@ Gemessen auf dem Hintergrund `#0e1c13` (bzw. `#1c3525` in der Coaching-Box):
 | vorher | nachher | Grund |
 |---|---|---|
 | „Deine Transformation. Jetzt.“ / „Echte Betreuung, echte Ergebnisse.“ | „Dein Weg. Dein Tempo.“ / „… persönliche Betreuung und ehrliches Feedback. Ergebnisse sind individuell.“ | Erfolgsversprechen im Gesundheitsbereich, irreführend nach § 5 UWG |
-| „Nur das, was wirklich funktioniert.“ | „Nur das, was sich für uns im Alltag bewährt hat.“ | Pauschale Wirksamkeitsaussage |
-| „teilen wir täglich“ / „Täglich neuer Content“ | „regelmäßig“ | Nur stehen lassen, wenn wirklich täglich gepostet wird |
+| „Nur das, was wirklich funktioniert.“ | „Nur das, was sich für mich im Alltag bewährt hat.“ | Pauschale Wirksamkeitsaussage |
+| „teilen wir täglich“ / „Täglich neuer Content“ | „teile ich regelmäßig“ | Nur stehen lassen, wenn wirklich täglich gepostet wird |
 | „melde mich innerhalb von 24 Stunden“ | „so bald wie möglich“ | Verbindliche Zusage, die ihr am Wochenende eventuell nicht haltet |
 | „Anfrage gesendet!“ | „Fast geschafft! … bitte dort absenden“ | Die Anfrage war zu diesem Zeitpunkt noch **nicht** gesendet, nur das Mailprogramm geöffnet |
 | Meta-Beschreibung „echtes 1:1 Coaching“ | „persönliches 1:1 Coaching. Keine medizinische Beratung.“ | |
@@ -132,11 +133,9 @@ Gemessen auf dem Hintergrund `#0e1c13` (bzw. `#1c3525` in der Coaching-Box):
 „Coaching“ und „Jetzt starten“ hießen anders als die Zielseite. Alle drei Einstiege heißen jetzt einheitlich **„Erstgespräch anfragen“**. Der Formular-Button heißt **„E-Mail-Anfrage vorbereiten“**, weil er nur das Mailprogramm öffnet. „Community“ heißt jetzt „Zur Community“, „← Zurück“ heißt „Zurück zur Startseite“.
 
 ### 15. Widerruf / Erstattung
-❌ Nicht vorhanden. Coaching per Video, Telefon oder Chat mit Verbrauchern ist ein **Fernabsatzvertrag**, dafür gilt ein **14-tägiges Widerrufsrecht** (§§ 312g, 355 BGB). Nötig sind:
-- Widerrufsbelehrung und Muster-Widerrufsformular, vor Vertragsschluss und danach auf einem dauerhaften Datenträger (z. B. per E-Mail);
-- falls das Coaching innerhalb der Frist beginnen soll: ausdrücklicher Wunsch der Kundin oder des Kunden plus Hinweis auf Wertersatz (§ 357a BGB) bzw. Erlöschen (§ 356 Abs. 4 BGB);
-- ohne korrekte Belehrung verlängert sich das Widerrufsrecht auf 12 Monate und 14 Tage.
-Eine freiwillige „Geld-zurück“-Regel darf das gesetzliche Widerrufsrecht nicht einschränken.
+✅ **Für diese Website nicht nötig.** Ein Widerrufsrecht gibt es nur bei **kostenpflichtigen** Verträgen (§ 312 Abs. 1 BGB). Die Anfrage und das kostenlose Erstgespräch sind kein bezahlter Vertrag. Widerrufsbelehrung, Muster-Widerrufsformular und Erstattungsregeln gehören auf die **Verkaufsseite**.
+
+⚠️ **Wichtige Ausnahme:** Wenn im Erstgespräch selbst (per Telefon, Video oder Chat) ein bezahltes Coaching vereinbart wird, ist das ebenfalls ein **Fernabsatzvertrag**. Dann muss die Kundin oder der Kunde die Widerrufsbelehrung trotzdem bekommen, vor oder spätestens direkt nach dem Abschluss per E-Mail. Am einfachsten: Im Gespräch nichts fest abschließen, sondern auf die Verkaufsseite verweisen und dort buchen lassen.
 
 ### 16. Bildrechte
 ✅ Keine Fotos oder Stockbilder. Das HLX-Logo ist ein eigenes SVG; die Social-Icons sind Emojis, also keine fremden Markenlogos. Die Schrift Inter steht unter der SIL Open Font License, kommerzielle Nutzung ist erlaubt.
@@ -155,16 +154,16 @@ Eine freiwillige „Geld-zurück“-Regel darf das gesetzliche Widerrufsrecht ni
 | TDDDG § 25 (Cookies) | ✅ |
 | UWG § 5 (Irreführung) | 🔧 Aussagen entschärft |
 | HWG / Health-Claims-VO 1924/2006 | ✅ aktuell keine Heilaussagen. ⚠️ Vorsicht bei künftigen Aussagen zu Nahrungsergänzung oder „heilt/lindert“ |
-| BGB Fernabsatz / Widerruf | ❌ fehlt (Punkt 15) |
-| **FernUSG** | ⚠️ **hohes Risiko**, siehe unten |
+| BGB Fernabsatz / Widerruf | ✅ hier nicht nötig, gehört auf die Verkaufsseite (Punkt 15) |
+| **FernUSG** | ⚠️ betrifft die **Verkaufsseite**, siehe unten |
 | PAngV (Preise) | ✅ keine Preise. ⚠️ Später nur Gesamtpreise inkl. USt angeben |
 | BFSG | ✅ vermutlich ausgenommen (Punkt 13) |
 
-**Fernunterrichtsschutzgesetz (FernUSG):** Laut BGH (Urteil vom 12.06.2025, III ZR 109/24) kann Online-Coaching „Fernunterricht“ sein, wenn Wissen überwiegend aus der Ferne vermittelt **und** der Lernerfolg überwacht wird (z. B. Check-ins, Feedback zu Aufgaben). Das gilt auch gegenüber Unternehmern. Ohne Zulassung durch die **ZFU** ist der Vertrag dann **nichtig**, und Kunden können bereits gezahltes Geld zurückfordern. Bevor ein bezahltes Online-Coaching startet, unbedingt anwaltlich klären lassen, ob euer Konzept darunter fällt (oder es so gestalten, dass es nicht darunter fällt).
+**Fernunterrichtsschutzgesetz (FernUSG):** Laut BGH (Urteil vom 12.06.2025, III ZR 109/24) kann Online-Coaching „Fernunterricht“ sein, wenn Wissen überwiegend aus der Ferne vermittelt **und** der Lernerfolg überwacht wird (z. B. Check-ins, Feedback zu Aufgaben). Das gilt auch gegenüber Unternehmern. Ohne Zulassung durch die **ZFU** ist der Vertrag dann **nichtig**, und Kunden können bereits gezahltes Geld zurückfordern. Das betrifft nicht diese Website, sondern das Coaching-Angebot und die Verkaufsseite. Trotzdem vor dem Verkauf unbedingt anwaltlich klären lassen, ob das Konzept darunter fällt (oder es so gestalten, dass es nicht darunter fällt).
 
 ### 20. Weitere Risiken
-1. **Markenname uneinheitlich:** Die Seite sagt „Healthletics“ (Überschrift „Warum Healthletics?“), Domain und Handles lauten „healthleticx“. Einheitlich machen und vorher bei DPMA/EUIPO prüfen, ob „Healthletics“ oder „healthleticx“ fremde Marken verletzt. Titel und Metadaten sind schon auf „healthleticx“ umgestellt.
-2. **„ich“ und „wir“ gemischt:** Die Startseite spricht von „wir“, Formular und Rechtstexte von „ich“. Wenn Loris und Justin gemeinsam auftreten, müssen beide (bzw. die Gesellschaft) im Impressum stehen.
+1. 🔧 **Markenname:** Überall steht jetzt „healthleticx“ (mit x). Jede Schreibweise mit s ist entfernt. ⚠️ Vor dem Livegang bei DPMA/EUIPO prüfen, ob „healthleticx“ eine fremde Marke verletzt.
+2. 🔧 **Ansprache:** Die Website spricht jetzt durchgehend in der Ich-Form oder neutral, nirgends mehr von „wir“. Im Impressum steht entsprechend eine verantwortliche Person.
 3. **Minderjährige:** Fitness-Content zieht junge Leute an. Coaching-Verträge mit unter 18-Jährigen brauchen die Zustimmung der Eltern (§§ 107 ff. BGB). Klar festlegen, z. B. „Coaching ab 18“.
 4. **Werbekennzeichnung auf Social Media:** Kooperationen und eigene Produkte auf Instagram, TikTok und YouTube als „Werbung“ kennzeichnen (§ 5a Abs. 4 UWG). Das betrifft nicht die Website, aber dieselben Leute.
 5. **mailto-Formular:** Ohne eingerichtetes Mailprogramm (z. B. an vielen Arbeits-PCs) passiert nichts. Der Hinweistext fängt das jetzt ab. Langfristig wäre ein serverseitiges Formular bei Cloud86 besser; dann aber TLS, Spam-Schutz ohne Google reCAPTCHA und eine angepasste Datenschutzerklärung einplanen.
@@ -176,7 +175,7 @@ Eine freiwillige „Geld-zurück“-Regel darf das gesetzliche Widerrufsrecht ni
 ## To-do vor dem Livegang (Reihenfolge)
 1. ❌ Name und Anschrift in Impressum und Datenschutz eintragen.
 2. ❌ E-Mail-Anbieter in der Datenschutzerklärung nennen, AVV mit Cloud86 abschließen, Log-Dauer und Server-Statistik prüfen.
-3. ⚠️ Markenname vereinheitlichen und Marke prüfen.
-4. ❌ Vor dem ersten bezahlten Coaching: FernUSG klären, AGB, Widerrufsbelehrung und Muster-Widerrufsformular erstellen lassen.
+3. ⚠️ Marke „healthleticx“ prüfen (DPMA/EUIPO).
+4. ⚠️ Auf der **Verkaufsseite**: FernUSG klären, AGB, Widerrufsbelehrung und Muster-Widerrufsformular erstellen lassen. Im Erstgespräch nichts fest abschließen, sondern auf die Verkaufsseite verweisen.
 5. ⚠️ Angepasste Werbetexte (Punkt 12) gegenlesen.
 6. ⚠️ Alle Rechtstexte anwaltlich prüfen lassen.
