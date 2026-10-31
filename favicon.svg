@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-345 -345 690 690">
+<title>healthleticx</title>
+<rect x="-345" y="-345" width="690" height="690" rx="96" fill="#08594A"/>
+<g fill="#FFFF00" transform="scale(1.02)">
+  <rect x="-194" y="-122" width="38" height="244" fill="none" stroke="#FFFF00" stroke-width="14"/>
+  <rect x="-229" y="-104" width="32" height="208" fill="none" stroke="#FFFF00" stroke-width="14"/>
+  <rect x="-315" y="-27" width="68" height="54"/>
+  <rect x="156" y="-122" width="38" height="244" fill="none" stroke="#FFFF00" stroke-width="14"/>
+  <rect x="197" y="-104" width="32" height="208" fill="none" stroke="#FFFF00" stroke-width="14"/>
+  <rect x="247" y="-27" width="68" height="54"/>
+  <rect x="-150" y="-9" width="300" height="18"/>
+</g>
+</svg>

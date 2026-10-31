@@ -1,7 +1,7 @@
 name: Deploy to GitHub Pages
 
-# Abgeschaltet: healthleticx läuft nur noch über die eigene Domain (Hosting Cloud86).
-# Nur noch von Hand startbar; base in vite.config.ts steht jetzt auf '/'.
+# Abgeschaltet: healthleticx läuft über die eigene Domain bei Cloud86 (Upload per Plesk).
+# Nur noch von Hand startbar.
 on:
   workflow_dispatch:
 
@@ -20,20 +20,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - run: npm ci
-
-      - run: npm run build
+      # Statische Seite, kein Build-Schritt: nur die Dateien der Website einsammeln
+      - name: Seite zusammenstellen
+        run: |
+          mkdir _site
+          cp -r index.html kontakt impressum datenschutz danke assets _site/
+          cp favicon.svg apple-touch-icon.png og-image.png robots.txt sitemap.xml _site/
 
       - uses: actions/configure-pages@v4
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: _site
 
   deploy:
     environment:
