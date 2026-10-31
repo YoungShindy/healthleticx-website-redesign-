@@ -179,3 +179,8 @@ Gemessen auf dem Hintergrund `#0e1c13` (bzw. `#1c3525` in der Coaching-Box):
 4. ⚠️ Auf der **Verkaufsseite**: FernUSG klären, AGB, Widerrufsbelehrung und Muster-Widerrufsformular erstellen lassen. Im Erstgespräch nichts fest abschließen, sondern auf die Verkaufsseite verweisen.
 5. ⚠️ Angepasste Werbetexte (Punkt 12) gegenlesen.
 6. ⚠️ Alle Rechtstexte anwaltlich prüfen lassen.
+
+---
+
+## Nachtrag: AGB, Widerruf, FernUSG (Entwürfe)
+Auf Wunsch sind **Entwürfe** für `#agb` und `#widerruf` ergänzt (Footer verlinkt). Sie enthalten Platzhalter für Preis, Leistung, Laufzeit, Anschrift und einen FernUSG-Abschnitt (Punkt 9 der AGB). **Nicht live verwenden, bevor ein Anwalt sie geprüft hat und die Platzhalter ausgefüllt sind.** Das FernUSG lässt sich nicht per Text lösen: Es muss geklärt werden, ob eine ZFU-Zulassung nötig ist. Bei Vertragsschluss über eine Website braucht ihr zusätzlich einen Kündigungsbutton (§ 312k BGB).

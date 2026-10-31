@@ -7,8 +7,8 @@ const FONT = "'Inter', system-ui, sans-serif"
 
 // Unterseiten hängen am Hash (#impressum usw.), damit sie direkt verlinkbar sind
 // und der Zurück-Knopf des Browsers funktioniert. Funktioniert ohne Server-Rewrites.
-type Page = 'home' | 'anfrage' | 'impressum' | 'datenschutz' | 'gesundheit'
-const SUBPAGES: Page[] = ['anfrage', 'impressum', 'datenschutz', 'gesundheit']
+type Page = 'home' | 'anfrage' | 'impressum' | 'datenschutz' | 'gesundheit' | 'agb' | 'widerruf'
+const SUBPAGES: Page[] = ['anfrage', 'impressum', 'datenschutz', 'gesundheit', 'agb', 'widerruf']
 
 function pageFromHash(): Page {
   const h = window.location.hash.slice(1)
@@ -44,6 +44,8 @@ export default function App() {
       {page === 'anfrage' && <CoachingForm />}
       {page === 'impressum' && <LegalPage title="Impressum"><ImpressumContent /></LegalPage>}
       {page === 'datenschutz' && <LegalPage title="Datenschutzerklärung"><DatenschutzContent /></LegalPage>}
+      {page === 'agb' && <LegalPage title="Allgemeine Geschäftsbedingungen (Coaching)"><AgbContent /></LegalPage>}
+      {page === 'widerruf' && <LegalPage title="Widerrufsbelehrung"><WiderrufContent /></LegalPage>}
       {page === 'gesundheit' && <LegalPage title="Gesundheitshinweis"><GesundheitContent /></LegalPage>}
       <Footer />
     </div>
@@ -209,6 +211,8 @@ function Footer() {
             <li><a href="#impressum" style={link}>Impressum</a></li>
             <li><a href="#datenschutz" style={link}>Datenschutz</a></li>
             <li><a href="#gesundheit" style={link}>Gesundheitshinweis</a></li>
+            <li><a href="#agb" style={link}>AGB</a></li>
+            <li><a href="#widerruf" style={link}>Widerruf</a></li>
           </ul>
         </nav>
         <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>© 2026 healthleticx</span>
@@ -515,6 +519,62 @@ function GesundheitContent() {
       <p>Wie sich Fitness, Gewicht oder Wohlbefinden verändern, hängt von vielen Faktoren ab. Beispiele und Erfahrungen anderer sind keine Garantie.</p>
       <H2>Im Notfall</H2>
       <p>Bei akuten Beschwerden wie Brustschmerz, Atemnot, Ohnmacht oder starker Blutung sofort den Notruf 112 wählen.</p>
+    </>
+  )
+}
+
+// ENTWURF: AGB und Widerrufsbelehrung vor dem Livegang anwaltlich prüfen lassen. Platzhalter in [eckigen Klammern] ausfüllen.
+function AgbContent() {
+  return (
+    <>
+      <p>Stand: 31. Oktober 2026 (Entwurf, wird vor Livegang rechtlich geprüft)</p>
+      <H2>1. Geltungsbereich und Anbieter</H2>
+      <p>Diese Bedingungen gelten für Verträge über mein persönliches 1:1 Coaching zwischen [Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort] (Anbieter) und dir als Kundin oder Kunde. Die Anfrage eines kostenlosen Erstgesprächs ist unverbindlich und begründet keinen Vertrag über bezahltes Coaching.</p>
+      <H2>2. Mindestalter</H2>
+      <p>Das Coaching richtet sich ausschließlich an Personen ab 18 Jahren. Mit dem Vertragsschluss bestätigst du, dass du mindestens 18 Jahre alt bist.</p>
+      <H2>3. Leistung</H2>
+      <p>Ich begleite dich zu Training, Ernährung und Mindset. Art und Umfang des Coachings ergeben sich aus dem jeweiligen Angebot: [Leistungsbeschreibung, z. B. Trainingsplan, Check-ins, Dauer]. Das Coaching dient der allgemeinen Information und Motivation. Es ist keine medizinische Beratung, Diagnose oder Therapie und ersetzt keine Ärztin und keinen Arzt. Ein bestimmter Erfolg wird nicht geschuldet. Siehe auch den <a href="#gesundheit" style={{ color: Y }}>Gesundheitshinweis</a>.</p>
+      <H2>4. Gesundheit und Mitwirkung</H2>
+      <p>Du bist selbst dafür verantwortlich, vor Beginn mit Vorerkrankungen, Verletzungen, Schmerzen, Schwangerschaft, Essstörung oder Medikamenteneinnahme ärztlichen Rat einzuholen. Du setzt die Empfehlungen eigenverantwortlich und im Rahmen deiner Gesundheit um.</p>
+      <H2>5. Preis und Zahlung</H2>
+      <p>Der Preis ergibt sich aus dem Angebot: [Betrag] € pro Monat inkl. gesetzlicher Umsatzsteuer, falls anfallend [Hinweis zur Umsatzsteuer, z. B. Kleinunternehmerregelung]. Die Zahlung erfolgt [Zahlungsweise und Fälligkeit].</p>
+      <H2>6. Laufzeit und Kündigung</H2>
+      <p>Der Vertrag läuft [Laufzeit, z. B. monatlich] und verlängert sich nicht länger als jeweils um einen Monat, wenn nicht gekündigt wird. Du kannst ihn jederzeit mit einer Frist von [Frist, höchstens einen Monat] in Textform (z. B. per E-Mail an info@healthleticx.de) kündigen. Das Recht zur Kündigung aus wichtigem Grund bleibt unberührt.</p>
+      <H2>7. Widerrufsrecht</H2>
+      <p>Als Verbraucherin oder Verbraucher hast du ein Widerrufsrecht. Einzelheiten stehen in der <a href="#widerruf" style={{ color: Y }}>Widerrufsbelehrung</a>.</p>
+      <H2>8. Haftung</H2>
+      <p>Ich hafte unbeschränkt bei Vorsatz und grober Fahrlässigkeit, bei Verletzung von Leben, Körper oder Gesundheit sowie nach dem Produkthaftungsgesetz. Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die Haftung auf den vorhersehbaren, vertragstypischen Schaden begrenzt. Im Übrigen ist die Haftung bei leichter Fahrlässigkeit ausgeschlossen.</p>
+      <H2>9. Fernunterrichtsschutzgesetz (FernUSG)</H2>
+      <p>[Hier ergänzen, nachdem rechtlich geklärt ist, ob das Coaching als Fernunterricht gilt: entweder die ZFU-Zulassungsnummer oder die Begründung, warum keine Zulassung nötig ist. Bis dahin das bezahlte Coaching nicht verkaufen.]</p>
+      <H2>10. Datenschutz und Streitbeilegung</H2>
+      <p>Informationen zur Verarbeitung deiner Daten findest du in der <a href="#datenschutz" style={{ color: Y }}>Datenschutzerklärung</a>. Ich nehme nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil. Es gilt deutsches Recht; zwingende Verbraucherschutzvorschriften deines Aufenthaltsstaates bleiben unberührt.</p>
+    </>
+  )
+}
+
+function WiderrufContent() {
+  return (
+    <>
+      <p>Diese Belehrung gilt für Verbraucherinnen und Verbraucher beim Kauf des bezahlten Coachings (Entwurf, wird vor Livegang rechtlich geprüft).</p>
+      <H2>Widerrufsrecht</H2>
+      <p>Du hast das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.</p>
+      <p style={{ marginTop: 12 }}>Um dein Widerrufsrecht auszuüben, musst du mir ([Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: info@healthleticx.de) mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über deinen Entschluss, diesen Vertrag zu widerrufen, informieren. Du kannst dafür das beigefügte Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.</p>
+      <p style={{ marginTop: 12 }}>Zur Wahrung der Widerrufsfrist reicht es aus, dass du die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absendest.</p>
+      <H2>Folgen des Widerrufs</H2>
+      <p>Wenn du diesen Vertrag widerrufst, habe ich dir alle Zahlungen, die ich von dir erhalten habe, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über deinen Widerruf bei mir eingegangen ist. Für diese Rückzahlung verwende ich dasselbe Zahlungsmittel, das du bei der ursprünglichen Transaktion eingesetzt hast.</p>
+      <p style={{ marginTop: 12 }}>Hast du verlangt, dass die Dienstleistung während der Widerrufsfrist beginnen soll, so hast du mir einen angemessenen Betrag zu zahlen, der dem Anteil der bis zu dem Zeitpunkt, zu dem du mich von der Ausübung des Widerrufsrechts unterrichtest, bereits erbrachten Dienstleistungen im Vergleich zum Gesamtumfang der im Vertrag vorgesehenen Dienstleistungen entspricht.</p>
+      <H2>Vorzeitiges Erlöschen</H2>
+      <p>Das Widerrufsrecht erlischt bei einem Vertrag zur Erbringung von Dienstleistungen, wenn ich die Dienstleistung vollständig erbracht habe und mit der Ausführung erst begonnen habe, nachdem du dazu deine ausdrückliche Zustimmung gegeben hast und gleichzeitig deine Kenntnis davon bestätigt hast, dass du dein Widerrufsrecht bei vollständiger Vertragserfüllung durch mich verlierst.</p>
+      <H2>Muster-Widerrufsformular</H2>
+      <p>(Wenn du den Vertrag widerrufen willst, fülle dieses Formular aus und sende es zurück.)</p>
+      <p style={{ marginTop: 12 }}>An [Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: info@healthleticx.de:<br />
+        Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung: ______<br />
+        Bestellt am (*) / erhalten am (*): ______<br />
+        Name der Verbraucherin / des Verbrauchers: ______<br />
+        Anschrift der Verbraucherin / des Verbrauchers: ______<br />
+        Unterschrift (nur bei Mitteilung auf Papier): ______<br />
+        Datum: ______<br />
+        (*) Unzutreffendes streichen.</p>
     </>
   )
 }
