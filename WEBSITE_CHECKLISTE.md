@@ -164,7 +164,7 @@ Gemessen auf dem Hintergrund `#0e1c13` (bzw. `#1c3525` in der Coaching-Box):
 ### 20. Weitere Risiken
 1. 🔧 **Markenname:** Überall steht jetzt „healthleticx“ (mit x). Jede Schreibweise mit s ist entfernt. ⚠️ Vor dem Livegang bei DPMA/EUIPO prüfen, ob „healthleticx“ eine fremde Marke verletzt.
 2. 🔧 **Ansprache:** Die Website spricht jetzt durchgehend in der Ich-Form oder neutral, nirgends mehr von „wir“. Im Impressum steht entsprechend eine verantwortliche Person.
-3. **Minderjährige:** Fitness-Content zieht junge Leute an. Coaching-Verträge mit unter 18-Jährigen brauchen die Zustimmung der Eltern (§§ 107 ff. BGB). Klar festlegen, z. B. „Coaching ab 18“.
+3. 🔧 **Minderjährige:** Coaching ab 18, auf Formularseite und im Gesundheitshinweis vermerkt. Verträge mit unter 18-Jährigen wären ohne Zustimmung der Eltern schwebend unwirksam (§§ 107, 108 BGB).
 4. **Werbekennzeichnung auf Social Media:** Kooperationen und eigene Produkte auf Instagram, TikTok und YouTube als „Werbung“ kennzeichnen (§ 5a Abs. 4 UWG). Das betrifft nicht die Website, aber dieselben Leute.
 5. **mailto-Formular:** Ohne eingerichtetes Mailprogramm (z. B. an vielen Arbeits-PCs) passiert nichts. Der Hinweistext fängt das jetzt ab. Langfristig wäre ein serverseitiges Formular bei Cloud86 besser; dann aber TLS, Spam-Schutz ohne Google reCAPTCHA und eine angepasste Datenschutzerklärung einplanen.
 6. **„App HLX Together“** wird im Gesundheitshinweis erwähnt, kommt auf der Seite aber sonst nicht vor. Sobald es die App gibt, braucht sie eigene Rechtstexte.

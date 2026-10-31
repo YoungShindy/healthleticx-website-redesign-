@@ -272,7 +272,7 @@ function CoachingForm() {
         <SLabel>Unverbindlich & kostenlos</SLabel>
         <h1 tabIndex={-1} style={{ fontSize: 34, fontWeight: 900, letterSpacing: -1, marginBottom: 10 }}>Erstgespräch anfragen</h1>
         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 15, lineHeight: 1.7, marginBottom: 40 }}>
-          Füll das Formular aus und ich melde mich so bald wie möglich bei dir. Das Erstgespräch ist kostenlos und unverbindlich.
+          Füll das Formular aus und ich melde mich so bald wie möglich bei dir. Das Erstgespräch ist kostenlos und unverbindlich. Das Coaching richtet sich an Personen ab 18 Jahren.
         </p>
 
         {opened ? (
@@ -490,11 +490,13 @@ function DatenschutzContent() {
       <p>Die Website liegt auf einem Server der Cloud86 B.V. (Lavendelheide 21-108, 9202 PD Drachten, Niederlande), der in meinem Auftrag tätig ist (Auftragsverarbeitung nach Art. 28 DSGVO). Der Server steht in den Niederlanden, eine Übermittlung in Drittländer findet nicht statt. Beim Aufruf werden technisch notwendige Daten wie IP-Adresse, Datum und Uhrzeit, aufgerufene Seite und Browserangaben verarbeitet und in Server-Logdateien gespeichert, um die Website auszuliefern und vor Missbrauch zu schützen. Die Logdateien werden regelmäßig rotiert und gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren, funktionierenden Website).</p>
       <H2>4. Coaching-Anfrage</H2>
       <p>Das Anfrageformular öffnet dein eigenes E-Mail-Programm mit einer vorbereiteten Nachricht an info@healthleticx.de. Die Website selbst speichert oder überträgt dabei nichts. Erst wenn du die E-Mail absendest, erhalte ich deine Angaben (Name, E-Mail, optional Telefon, Wunschzeiten, Nachricht). Pflicht sind nur Name, E-Mail und eine Wunschzeit, weil ich dich sonst nicht erreichen kann. Ich nutze die Angaben, um deine Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO), und lösche sie, wenn keine Zusammenarbeit zustande kommt, spätestens nach 6 Monaten. Bitte schicke keine Gesundheitsdaten wie Diagnosen oder Medikamente per E-Mail.</p>
-      <H2>5. Externe Links</H2>
+      <H2>5. E-Mail-Postfach</H2>
+      <p>Das Postfach info@healthleticx.de liegt ebenfalls bei der Cloud86 B.V. (siehe Punkt 3). Eingehende E-Mails werden dort auf dem Server gespeichert, bis ich sie lösche. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b bzw. lit. f DSGVO.</p>
+      <H2>6. Externe Links</H2>
       <p>Links zu Instagram, TikTok, YouTube, WhatsApp und Telegram sind einfache Links. Erst beim Anklicken verlässt du diese Website; dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>
-      <H2>6. Deine Rechte</H2>
+      <H2>7. Deine Rechte</H2>
       <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO). Beschweren kannst du dich bei einer Aufsichtsbehörde, z. B. beim Landesbeauftragten für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart.</p>
-      <H2>7. Widerspruchsrecht (Art. 21 DSGVO)</H2>
+      <H2>8. Widerspruchsrecht (Art. 21 DSGVO)</H2>
       <p><strong>Soweit ich Daten auf Grundlage berechtigter Interessen (Art. 6 Abs. 1 lit. f DSGVO) verarbeite, kannst du dem aus Gründen, die sich aus deiner besonderen Situation ergeben, jederzeit widersprechen. Eine formlose Nachricht an info@healthleticx.de genügt.</strong></p>
     </>
   )
@@ -507,6 +509,8 @@ function GesundheitContent() {
       <p>Ich bin kein Arzt und mache keine Heilversprechen. Mein Coaching, meine Inhalte und die App HLX Together dienen der allgemeinen Information und Motivation. Sie sind keine Diagnose, Therapie oder medizinische Beratung und ersetzen nicht den Rat von Ärztin oder Arzt, Physiotherapie oder Ernährungsfachkraft.</p>
       <H2>Bevor du startest</H2>
       <p>Sprich bitte vorher mit deiner Ärztin oder deinem Arzt, wenn du Vorerkrankungen, Verletzungen, Schmerzen, eine Schwangerschaft, eine Essstörung oder Medikamente hast. Intervallfasten oder ein Kaloriendefizit sind nicht für alle geeignet, insbesondere nicht für Schwangere, Stillende, Menschen mit Essstörungen oder Untergewicht und Personen unter 18 Jahren.</p>
+      <H2>Mindestalter</H2>
+      <p>Mein Coaching ist nur für Personen ab 18 Jahren gedacht.</p>
       <H2>Ergebnisse sind individuell</H2>
       <p>Wie sich Fitness, Gewicht oder Wohlbefinden verändern, hängt von vielen Faktoren ab. Beispiele und Erfahrungen anderer sind keine Garantie.</p>
       <H2>Im Notfall</H2>
