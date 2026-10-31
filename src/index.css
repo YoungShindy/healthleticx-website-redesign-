@@ -97,3 +97,48 @@ body {
     padding: 32px 24px !important;
   }
 }
+
+/* ── Barrierefreiheit ── */
+:focus-visible {
+  outline: 3px solid #d4b84a;
+  outline-offset: 3px;
+}
+/* Programmatisch fokussierte Überschriften/Hauptbereich ohne Rahmen */
+[tabindex="-1"]:focus { outline: none; }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 200;
+  background: #d4b84a;
+  color: #0e1c13;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.skip-link:focus { top: 12px; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}

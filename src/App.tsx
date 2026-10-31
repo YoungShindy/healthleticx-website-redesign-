@@ -1,14 +1,61 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const Y = '#d4b84a'
 const GD = '#0e1c13'
 const GM = '#1c3525'
+const FONT = "'Inter', system-ui, sans-serif"
 
-type Page = 'home' | 'coaching-form' | 'impressum' | 'datenschutz' | 'gesundheit'
+// Unterseiten hängen am Hash (#impressum usw.), damit sie direkt verlinkbar sind
+// und der Zurück-Knopf des Browsers funktioniert. Funktioniert ohne Server-Rewrites.
+type Page = 'home' | 'anfrage' | 'impressum' | 'datenschutz' | 'gesundheit' | 'agb' | 'widerruf'
+const SUBPAGES: Page[] = ['anfrage', 'impressum', 'datenschutz', 'gesundheit', 'agb', 'widerruf']
+
+function pageFromHash(): Page {
+  const h = window.location.hash.slice(1)
+  return (SUBPAGES as string[]).includes(h) ? (h as Page) : 'home'
+}
 
 export default function App() {
+  const [page, setPage] = useState<Page>(pageFromHash)
+  const firstRender = useRef(true)
+
+  useEffect(() => {
+    const fn = () => setPage(pageFromHash())
+    window.addEventListener('hashchange', fn)
+    return () => window.removeEventListener('hashchange', fn)
+  }, [])
+
+  // Beim Seitenwechsel nach oben scrollen und den Fokus auf die neue Überschrift setzen (Screenreader, Tastatur).
+  useEffect(() => {
+    if (firstRender.current) { firstRender.current = false; return }
+    if (page !== 'home') window.scrollTo(0, 0)
+    document.querySelector<HTMLElement>('main h1')?.focus()
+  }, [page])
+
+  const skipToContent = (e: React.MouseEvent) => {
+    e.preventDefault()
+    document.getElementById('inhalt')?.focus()
+  }
+
+  return (
+    <div style={{ background: GD, color: '#fff', fontFamily: FONT, overflowX: 'hidden', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <a href="#inhalt" className="skip-link" onClick={skipToContent}>Zum Inhalt springen</a>
+      {page === 'home' && <HomePage />}
+      {page === 'anfrage' && <CoachingForm />}
+      {page === 'impressum' && <LegalPage title="Impressum"><ImpressumContent /></LegalPage>}
+      {page === 'datenschutz' && <LegalPage title="Datenschutzerklärung"><DatenschutzContent /></LegalPage>}
+      {page === 'agb' && <LegalPage title="Allgemeine Geschäftsbedingungen (Coaching)"><AgbContent /></LegalPage>}
+      {page === 'widerruf' && <LegalPage title="Widerrufsbelehrung"><WiderrufContent /></LegalPage>}
+      {page === 'gesundheit' && <LegalPage title="Gesundheitshinweis"><GesundheitContent /></LegalPage>}
+      <Footer />
+    </div>
+  )
+}
+
+/* ── Startseite ── */
+
+function HomePage() {
   const [scrolled, setScrolled] = useState(false)
-  const [page, setPage] = useState<Page>('home')
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20)
@@ -16,166 +63,168 @@ export default function App() {
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  useEffect(() => { window.scrollTo(0, 0) }, [page])
-
-  if (page === 'coaching-form') return <CoachingForm onBack={() => setPage('home')} />
-  if (page === 'impressum') return <LegalPage title="Impressum" onBack={() => setPage('home')}><ImpressumContent /></LegalPage>
-  if (page === 'datenschutz') return <LegalPage title="Datenschutzerklärung" onBack={() => setPage('home')}><DatenschutzContent /></LegalPage>
-  if (page === 'gesundheit') return <LegalPage title="Gesundheitshinweis" onBack={() => setPage('home')}><GesundheitContent /></LegalPage>
-
-  const openCoaching = () => setPage('coaching-form')
-
   return (
-    <div style={{ background: GD, color: '#fff', fontFamily: "'Inter', system-ui, sans-serif", overflowX: 'hidden' }}>
-
+    <>
       {/* NAV */}
-      <nav style={{
+      <header style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
         background: scrolled ? 'rgba(14,28,19,0.97)' : 'transparent',
         backdropFilter: scrolled ? 'blur(16px)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(212,184,74,0.1)' : '1px solid transparent',
         transition: 'all 0.25s',
       }}>
-        <div className="nav-pad" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
-          <button onClick={() => setPage('home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-            <HLXLogo size={32} />
-          </button>
+        <nav aria-label="Hauptnavigation" className="nav-pad" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
+          <a href="#top" aria-label="healthleticx, zur Startseite" style={{ display: 'block' }}>
+            <HLXLogo size={32} decorative />
+          </a>
           <div className="nav-links-desktop" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
             <div style={{ display: 'flex', gap: 24 }}>
               {[['#about', 'Story'], ['#links', 'Links']].map(([h, l]) => (
-                <a key={l} href={h} style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, textDecoration: 'none', fontWeight: 500 }}>{l}</a>
+                <a key={l} href={h} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none', fontWeight: 500 }}>{l}</a>
               ))}
             </div>
-            <button onClick={openCoaching} style={{ background: Y, color: GD, padding: '8px 18px', borderRadius: 7, fontWeight: 800, fontSize: 13, border: 'none', cursor: 'pointer' }}>
-              Coaching
-            </button>
+            <a href="#anfrage" style={{ background: Y, color: GD, padding: '8px 18px', borderRadius: 7, fontWeight: 800, fontSize: 13, textDecoration: 'none' }}>
+              Erstgespräch anfragen
+            </a>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
-      {/* HERO */}
-      <section className="hero-section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 32px', maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ width: '100%', paddingTop: 60 }}>
-          <div className="hero-grid">
+      <main id="inhalt" tabIndex={-1}>
+        {/* HERO */}
+        <section className="hero-section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 32px', maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ width: '100%', paddingTop: 60 }}>
+            <div className="hero-grid">
+              <div>
+                <div style={{ display: 'inline-block', background: Y, color: GD, fontSize: 11, fontWeight: 800, padding: '4px 10px', borderRadius: 4, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 24 }}>
+                  @healthleticx
+                </div>
+                <h1 className="hero-h1" tabIndex={-1} style={{ fontSize: 60, fontWeight: 900, lineHeight: 1.0, letterSpacing: -2, marginBottom: 24, textTransform: 'uppercase' }}>
+                  Gesund.<br />
+                  <span style={{ color: Y }}>Stark.</span><br />
+                  Echt.
+                </h1>
+                <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, marginBottom: 36, maxWidth: 400 }}>
+                  Keine Ausreden. Kein Bullshit. Ehrliche Inhalte zu Training, Ernährung und mentalem Wachstum. Für alle, die es wirklich wollen.
+                </p>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  <a href="#anfrage" style={{ background: Y, color: GD, padding: '13px 28px', borderRadius: 8, fontWeight: 800, fontSize: 14, textDecoration: 'none' }}>
+                    Erstgespräch anfragen
+                  </a>
+                  <a href="#links" style={{ border: '1px solid rgba(255,255,255,0.3)', color: 'rgba(255,255,255,0.8)', padding: '13px 28px', borderRadius: 8, fontWeight: 500, fontSize: 14, textDecoration: 'none' }}>
+                    Zur Community
+                  </a>
+                </div>
+              </div>
+              <div className="logo-hero" style={{ display: 'flex', justifyContent: 'center' }}>
+                <div style={{ width: '100%', maxWidth: 420 }}>
+                  <HLXLogoFull />
+                </div>
+              </div>
+            </div>
+
+            <ul className="strip" style={{ listStyle: 'none', marginTop: 60, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 28 }}>
+              {[
+                { val: 'Training', sub: 'Für jeden Level' },
+                { val: 'Ernährung', sub: 'Alltagstauglich' },
+                { val: 'Mindset', sub: 'Mental stark' },
+                { val: 'Community', sub: 'Für alle' },
+              ].map((s, i) => (
+                <li key={s.val} className="strip-item" style={{ padding: '0 20px', borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: Y, marginBottom: 3 }}>{s.val}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>{s.sub}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ABOUT */}
+        <section id="about" aria-labelledby="about-h" className="section-pad" style={{ padding: '72px 32px', maxWidth: 1100, margin: '0 auto' }}>
+          <div className="two-col">
             <div>
-              <div style={{ display: 'inline-block', background: Y, color: GD, fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 4, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 24 }}>
-                @healthleticx
-              </div>
-              <h1 className="hero-h1" style={{ fontSize: 60, fontWeight: 900, lineHeight: 1.0, letterSpacing: -2, marginBottom: 24, textTransform: 'uppercase' }}>
-                Gesund.<br />
-                <span style={{ color: Y }}>Stark.</span><br />
-                Echt.
-              </h1>
-              <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, marginBottom: 36, maxWidth: 400 }}>
-                Keine Ausreden. Kein Bullshit. Ehrliche Inhalte zu Training, Ernährung und mentalem Wachstum. Für alle, die es wirklich wollen.
+              <SLabel>Die Story</SLabel>
+              <h2 id="about-h" style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5 }}>Warum healthleticx?</h2>
+            </div>
+            <div>
+              <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.85, marginBottom: 18 }}>
+                healthleticx steht für ein gesundes Leben ohne Kompromisse. Sport, Ernährung, mentale Gesundheit: Für mich gehört das zusammen.
               </p>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <button onClick={openCoaching} style={{ background: Y, color: GD, padding: '13px 28px', borderRadius: 8, fontWeight: 800, fontSize: 14, border: 'none', cursor: 'pointer' }}>
-                  Coaching buchen
-                </button>
-                <a href="#links" style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.65)', padding: '13px 28px', borderRadius: 8, fontWeight: 500, fontSize: 14, textDecoration: 'none' }}>
-                  Community
-                </a>
-              </div>
-            </div>
-            <div className="logo-hero" style={{ display: 'flex', justifyContent: 'center' }}>
-              <div style={{ width: '100%', maxWidth: 420 }}>
-                <HLXLogoFull />
-              </div>
+              <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.85 }}>
+                Auf Instagram, TikTok und YouTube teile ich regelmäßig ehrlichen Content. Keine gefilterte Traumwelt. Nur das, was sich für mich im Alltag bewährt hat.
+              </p>
             </div>
           </div>
+        </section>
 
-          <div className="strip" style={{ marginTop: 60, borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 28 }}>
-            {[
-              { val: 'Training', sub: 'Für jeden Level' },
-              { val: 'Ernährung', sub: 'Alltagstauglich' },
-              { val: 'Mindset', sub: 'Mental stark' },
-              { val: 'Community', sub: 'Für alle' },
-            ].map((s, i) => (
-              <div key={s.val} className="strip-item" style={{ padding: '0 20px', borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: Y, marginBottom: 3 }}>{s.val}</div>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>{s.sub}</div>
-              </div>
-            ))}
+        <Divider />
+
+        {/* SOCIAL LINKS */}
+        <section id="links" aria-labelledby="links-h" className="section-pad" style={{ padding: '72px 32px', maxWidth: 1100, margin: '0 auto' }}>
+          <div className="social-grid">
+            <div>
+              <SLabel>Community</SLabel>
+              <h2 id="links-h" style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5, marginBottom: 10 }}>Überall dabei sein.</h2>
+              <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 14, lineHeight: 1.7 }}>Regelmäßig neuer Content zu Training, Ernährung und Mindset.</p>
+            </div>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {SOCIALS.map(s => <li key={s.label}><SocialBtn {...s} /></li>)}
+            </ul>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Divider />
+        <Divider />
 
-      {/* ABOUT */}
-      <section id="about" className="section-pad" style={{ padding: '72px 32px', maxWidth: 1100, margin: '0 auto' }}>
-        <div className="two-col">
-          <div>
-            <SLabel>Die Story</SLabel>
-            <h2 style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5 }}>Warum Healthletics?</h2>
+        {/* COACHING CTA */}
+        <section aria-labelledby="cta-h" className="section-pad" style={{ padding: '72px 32px 100px', maxWidth: 1100, margin: '0 auto' }}>
+          <div className="coaching-cta cta-box-inner" style={{ background: GM, border: '1px solid rgba(212,184,74,0.18)', borderRadius: 20, padding: '52px 48px' }}>
+            <div>
+              <SLabel>1:1 Coaching</SLabel>
+              <h2 id="cta-h" style={{ fontSize: 32, fontWeight: 800, letterSpacing: -0.5, marginBottom: 12 }}>Dein Weg. Dein Tempo.</h2>
+              <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 15, maxWidth: 480, lineHeight: 1.75 }}>
+                Training, Ernährung, Mindset: alles auf dich zugeschnitten. Kein Copy-Paste-Plan, sondern persönliche Betreuung und ehrliches Feedback. Ergebnisse sind individuell.
+              </p>
+            </div>
+            <a href="#anfrage" style={{ background: Y, color: GD, padding: '15px 32px', borderRadius: 10, fontWeight: 800, fontSize: 15, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              Erstgespräch anfragen
+            </a>
           </div>
-          <div>
-            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.85, marginBottom: 18 }}>
-              Healthletics steht für ein gesundes Leben ohne Kompromisse. Sport, Ernährung, mentale Gesundheit: Das gehört für uns zusammen.
-            </p>
-            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.85 }}>
-              Auf Instagram, TikTok und YouTube teilen wir täglich ehrlichen Content. Keine gefilterte Traumwelt. Nur das, was wirklich funktioniert.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* SOCIAL LINKS */}
-      <section id="links" className="section-pad" style={{ padding: '72px 32px', maxWidth: 1100, margin: '0 auto' }}>
-        <div className="social-grid">
-          <div>
-            <SLabel>Community</SLabel>
-            <h2 style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5, marginBottom: 10 }}>Überall dabei sein.</h2>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, lineHeight: 1.7 }}>Täglich neuer Content zu Training, Ernährung und Mindset.</p>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {SOCIALS.map(s => <SocialBtn key={s.label} {...s} />)}
-          </div>
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* COACHING CTA */}
-      <section className="section-pad" style={{ padding: '72px 32px 100px', maxWidth: 1100, margin: '0 auto' }}>
-        <div className="coaching-cta cta-box-inner" style={{ background: GM, border: '1px solid rgba(212,184,74,0.18)', borderRadius: 20, padding: '52px 48px' }}>
-          <div>
-            <SLabel>1:1 Coaching</SLabel>
-            <h2 style={{ fontSize: 32, fontWeight: 800, letterSpacing: -0.5, marginBottom: 12 }}>Deine Transformation. Jetzt.</h2>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 15, maxWidth: 480, lineHeight: 1.75 }}>
-              Training, Ernährung, Mindset: alles auf dich zugeschnitten. Kein Copy-Paste-Plan. Echte Betreuung, echte Ergebnisse.
-            </p>
-          </div>
-          <button onClick={openCoaching} style={{ background: Y, color: GD, padding: '15px 32px', borderRadius: 10, fontWeight: 800, fontSize: 15, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-            Jetzt starten
-          </button>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '24px 32px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <HLXLogo size={26} />
-          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-            <a href="mailto:info@healthleticx.de" style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, textDecoration: 'none' }}>info@healthleticx.de</a>
-            <button onClick={() => setPage('impressum')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Impressum</button>
-            <button onClick={() => setPage('datenschutz')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Datenschutz</button>
-            <button onClick={() => setPage('gesundheit')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 12, cursor: 'pointer', padding: 0 }}>Gesundheitshinweis</button>
-          </div>
-          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12 }}>© 2026 healthleticx</span>
-        </div>
-        <p style={{ maxWidth: 1100, margin: '14px auto 0', color: 'rgba(255,255,255,0.3)', fontSize: 11, lineHeight: 1.6 }}>
-          Hinweis: Ich bin kein Arzt und mache keine Heilversprechen. Meine Inhalte und mein Coaching ersetzen keine medizinische Beratung, Diagnose oder Behandlung.
-        </p>
-      </footer>
-    </div>
+        </section>
+      </main>
+    </>
   )
 }
 
-/* ── Coaching Contact Form ── */
+/* ── Footer (auf jeder Seite, damit Impressum & Datenschutz immer erreichbar sind) ── */
+
+function Footer() {
+  const link: React.CSSProperties = { color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'underline', textUnderlineOffset: 3 }
+  return (
+    <footer style={{ marginTop: 'auto', borderTop: '1px solid rgba(255,255,255,0.06)', padding: '24px 32px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <HLXLogo size={26} />
+        <nav aria-label="Rechtliches">
+          <ul style={{ listStyle: 'none', display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+            <li><a href="mailto:info@healthleticx.de" style={link}>info@healthleticx.de</a></li>
+            <li><a href="#impressum" style={link}>Impressum</a></li>
+            <li><a href="#datenschutz" style={link}>Datenschutz</a></li>
+            <li><a href="#gesundheit" style={link}>Gesundheitshinweis</a></li>
+            <li><a href="#agb" style={link}>AGB</a></li>
+            <li><a href="#widerruf" style={link}>Widerruf</a></li>
+          </ul>
+        </nav>
+        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>© 2026 healthleticx</span>
+      </div>
+      <p style={{ maxWidth: 1100, margin: '14px auto 0', color: 'rgba(255,255,255,0.6)', fontSize: 12, lineHeight: 1.6 }}>
+        Hinweis: Ich bin kein Arzt und mache keine Heilversprechen. Meine Inhalte und mein Coaching ersetzen keine medizinische Beratung, Diagnose oder Behandlung.
+      </p>
+    </footer>
+  )
+}
+
+/* ── Coaching-Anfrage ── */
 
 const TIME_SLOTS = [
   'Mo – Fr, Vormittags (9 – 12 Uhr)',
@@ -185,118 +234,129 @@ const TIME_SLOTS = [
   'Sonntag (10 – 14 Uhr)',
 ]
 
-function CoachingForm({ onBack }: { onBack: () => void }) {
+function CoachingForm() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [message, setMessage] = useState('')
   const [slots, setSlots] = useState<string[]>([])
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [slotError, setSlotError] = useState(false)
+  const [opened, setOpened] = useState(false)
 
-  const toggleSlot = (s: string) =>
+  const toggleSlot = (s: string) => {
+    setSlotError(false)
     setSlots(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s])
+  }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!name || !email || slots.length === 0) return
-    setStatus('sending')
-    try {
-      const body = `Name: ${name}\nE-Mail: ${email}\nTelefon: ${phone || 'nicht angegeben'}\n\nVerfügbare Zeiten:\n${slots.join('\n')}\n\nNachricht:\n${message}`
-      window.location.href = `mailto:info@healthleticx.de?subject=Coaching-Anfrage von ${encodeURIComponent(name)}&body=${encodeURIComponent(body)}`
-      setStatus('sent')
-    } catch {
-      setStatus('error')
+    if (slots.length === 0) {
+      setSlotError(true)
+      document.getElementById('slot-0')?.focus()
+      return
     }
+    const subject = `Coaching-Anfrage von ${name}`
+    const body = `Name: ${name}\nE-Mail: ${email}\nTelefon: ${phone || 'nicht angegeben'}\n\nVerfügbare Zeiten:\n${slots.join('\n')}\n\nNachricht:\n${message}`
+    window.location.href = `mailto:info@healthleticx.de?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    setOpened(true)
   }
 
   const input: React.CSSProperties = {
-    width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)',
-    borderRadius: 10, padding: '12px 16px', color: '#fff', fontSize: 15, outline: 'none',
-    fontFamily: 'inherit',
+    width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.4)',
+    borderRadius: 10, padding: '12px 16px', color: '#fff', fontSize: 15, fontFamily: 'inherit',
   }
-  const label: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginBottom: 6, display: 'block' }
+  const label: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: 6, display: 'block' }
+  const hint: React.CSSProperties = { fontSize: 12, color: 'rgba(255,255,255,0.65)', marginTop: 6, lineHeight: 1.5 }
 
   return (
-    <div style={{ background: GD, color: '#fff', fontFamily: "'Inter', system-ui, sans-serif", minHeight: '100vh', padding: '80px 24px 60px' }}>
+    <main id="inhalt" tabIndex={-1} style={{ padding: '80px 24px 60px' }}>
       <div style={{ maxWidth: 640, margin: '0 auto' }}>
-        <button onClick={onBack} style={{ background: 'none', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.5)', padding: '7px 16px', borderRadius: 7, cursor: 'pointer', fontSize: 13, marginBottom: 36 }}>
-          ← Zurück
-        </button>
+        <BackLink />
 
         <SLabel>Unverbindlich & kostenlos</SLabel>
-        <h1 style={{ fontSize: 34, fontWeight: 900, letterSpacing: -1, marginBottom: 10 }}>Erstgespräch anfragen</h1>
-        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 15, lineHeight: 1.7, marginBottom: 40 }}>
-          Füll das Formular aus und ich melde mich innerhalb von 24 Stunden bei dir. Das Erstgespräch ist vollkommen unverbindlich.
+        <h1 tabIndex={-1} style={{ fontSize: 34, fontWeight: 900, letterSpacing: -1, marginBottom: 10 }}>Erstgespräch anfragen</h1>
+        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 15, lineHeight: 1.7, marginBottom: 40 }}>
+          Füll das Formular aus und ich melde mich so bald wie möglich bei dir. Das Erstgespräch ist kostenlos und unverbindlich. Das Coaching richtet sich an Personen ab 18 Jahren.
         </p>
 
-        {status === 'sent' ? (
-          <div style={{ background: GM, border: '1px solid rgba(212,184,74,0.2)', borderRadius: 16, padding: '40px 32px', textAlign: 'center' }}>
-            <div style={{ fontSize: 40, marginBottom: 16 }}>✅</div>
-            <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>Anfrage gesendet!</h2>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 15 }}>Ich melde mich bald bei dir. Bis dahin kannst du mir auch direkt schreiben.</p>
-            <button onClick={onBack} style={{ marginTop: 28, background: Y, color: GD, padding: '12px 28px', borderRadius: 8, fontWeight: 800, fontSize: 14, border: 'none', cursor: 'pointer' }}>
+        {opened ? (
+          <div role="status" style={{ background: GM, border: '1px solid rgba(212,184,74,0.2)', borderRadius: 16, padding: '40px 32px', textAlign: 'center' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>Fast geschafft!</h2>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 15, lineHeight: 1.7 }}>
+              Dein E-Mail-Programm sollte sich mit einer vorbereiteten Nachricht geöffnet haben. Bitte sende sie dort ab, erst dann erhalte ich deine Anfrage.
+              Falls sich nichts geöffnet hat, schreib mir direkt an <a href="mailto:info@healthleticx.de" style={{ color: Y }}>info@healthleticx.de</a>.
+            </p>
+            <a href="#top" style={{ display: 'inline-block', marginTop: 28, background: Y, color: GD, padding: '12px 28px', borderRadius: 8, fontWeight: 800, fontSize: 14, textDecoration: 'none' }}>
               Zurück zur Startseite
-            </button>
+            </a>
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>Pflichtfelder sind mit * markiert.</p>
 
             <div className="form-row">
               <div>
-                <label style={label}>Name *</label>
-                <input style={input} placeholder="Dein Name" value={name} onChange={e => setName(e.target.value)} required />
+                <label htmlFor="f-name" style={label}>Name *</label>
+                <input id="f-name" name="name" autoComplete="name" style={input} placeholder="Dein Name" value={name} onChange={e => setName(e.target.value)} required />
               </div>
               <div>
-                <label style={label}>E-Mail *</label>
-                <input style={input} type="email" placeholder="deine@email.de" value={email} onChange={e => setEmail(e.target.value)} required />
+                <label htmlFor="f-email" style={label}>E-Mail *</label>
+                <input id="f-email" name="email" autoComplete="email" style={input} type="email" placeholder="deine@email.de" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
             </div>
 
             <div>
-              <label style={label}>Telefon (optional)</label>
-              <input style={input} placeholder="+49 ..." value={phone} onChange={e => setPhone(e.target.value)} />
+              <label htmlFor="f-phone" style={label}>Telefon (optional)</label>
+              <input id="f-phone" name="tel" type="tel" autoComplete="tel" style={input} placeholder="+49 ..." value={phone} onChange={e => setPhone(e.target.value)} />
             </div>
 
-            <div>
-              <label style={{ ...label, marginBottom: 12 }}>Wann passt es dir? * (mehrere möglich)</label>
+            <fieldset style={{ border: 'none' }} aria-describedby={slotError ? 'slot-error' : undefined}>
+              <legend style={{ ...label, marginBottom: 12 }}>Wann passt es dir? * (mehrere möglich)</legend>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {TIME_SLOTS.map(s => (
-                  <label key={s} style={{ display: 'flex', alignItems: 'center', gap: 12, background: slots.includes(s) ? 'rgba(212,184,74,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${slots.includes(s) ? 'rgba(212,184,74,0.35)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 10, padding: '12px 16px', cursor: 'pointer', transition: 'all 0.15s' }}>
-                    <input type="checkbox" checked={slots.includes(s)} onChange={() => toggleSlot(s)} style={{ accentColor: Y, width: 16, height: 16 }} />
-                    <span style={{ fontSize: 14, color: slots.includes(s) ? Y : 'rgba(255,255,255,0.7)', fontWeight: slots.includes(s) ? 600 : 400 }}>{s}</span>
-                  </label>
-                ))}
+                {TIME_SLOTS.map((s, i) => {
+                  const on = slots.includes(s)
+                  return (
+                    <label key={s} htmlFor={`slot-${i}`} style={{ display: 'flex', alignItems: 'center', gap: 12, background: on ? 'rgba(212,184,74,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${on ? 'rgba(212,184,74,0.5)' : 'rgba(255,255,255,0.2)'}`, borderRadius: 10, padding: '12px 16px', cursor: 'pointer', transition: 'all 0.15s' }}>
+                      <input id={`slot-${i}`} type="checkbox" checked={on} onChange={() => toggleSlot(s)} style={{ accentColor: Y, width: 18, height: 18 }} />
+                      <span style={{ fontSize: 14, color: on ? Y : 'rgba(255,255,255,0.8)', fontWeight: on ? 600 : 400 }}>{s}</span>
+                    </label>
+                  )
+                })}
               </div>
-            </div>
+              {slotError && (
+                <p id="slot-error" role="alert" style={{ marginTop: 10, fontSize: 14, color: '#ffb4a8', fontWeight: 600 }}>
+                  Bitte wähle mindestens eine Zeit aus.
+                </p>
+              )}
+            </fieldset>
 
             <div>
-              <label style={label}>Was möchtest du besprechen? (optional)</label>
-              <textarea style={{ ...input, minHeight: 100, resize: 'vertical' }} placeholder="Kurze Beschreibung deiner Ziele, aktuelle Situation, Fragen..." value={message} onChange={e => setMessage(e.target.value)} />
+              <label htmlFor="f-message" style={label}>Was möchtest du besprechen? (optional)</label>
+              <textarea id="f-message" name="message" aria-describedby="f-message-hint" style={{ ...input, minHeight: 100, resize: 'vertical' }} placeholder="Deine Ziele, Fragen, wie viel Zeit du hast ..." value={message} onChange={e => setMessage(e.target.value)} />
+              <p id="f-message-hint" style={hint}>Bitte keine Gesundheitsdaten wie Diagnosen, Verletzungen oder Medikamente. Falls das wichtig ist, frage ich im Gespräch danach.</p>
             </div>
 
-            <button
-              type="submit"
-              disabled={!name || !email || slots.length === 0 || status === 'sending'}
-              style={{ background: (!name || !email || slots.length === 0) ? 'rgba(212,184,74,0.4)' : Y, color: GD, padding: '15px', borderRadius: 10, fontWeight: 800, fontSize: 16, border: 'none', cursor: (!name || !email || slots.length === 0) ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
-            >
-              {status === 'sending' ? 'Wird gesendet...' : 'Anfrage senden'}
+            <button type="submit" style={{ background: Y, color: GD, padding: '15px', borderRadius: 10, fontWeight: 800, fontSize: 16, border: 'none', cursor: 'pointer' }}>
+              E-Mail-Anfrage vorbereiten
             </button>
 
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
-              Deine Daten werden nur für die Kontaktaufnahme genutzt und nicht weitergegeben.
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, textAlign: 'center' }}>
+              Der Knopf öffnet dein E-Mail-Programm mit einer vorbereiteten Nachricht. Diese Website speichert nichts. Deine Angaben nutze ich nur, um deine Anfrage zu beantworten.
+              Mehr dazu in der <a href="#datenschutz" style={{ color: Y }}>Datenschutzerklärung</a>.
             </p>
           </form>
         )}
       </div>
-    </div>
+    </main>
   )
 }
 
 /* ── Logo ── */
 
-function HLXLogo({ size = 32 }: { size?: number }) {
+function HLXLogo({ size = 32, decorative = false }: { size?: number; decorative?: boolean }) {
   return (
-    <svg viewBox="0 0 530 130" height={size} style={{ display: 'block' }} aria-label="Healthletics">
+    <svg viewBox="0 0 530 130" height={size} style={{ display: 'block' }}
+      {...(decorative ? { 'aria-hidden': true, focusable: false } : { role: 'img', 'aria-label': 'healthleticx Logo' })}>
       <rect width="530" height="130" rx="8" fill="#1a5c3a" />
       <LogoInner />
     </svg>
@@ -305,7 +365,7 @@ function HLXLogo({ size = 32 }: { size?: number }) {
 
 function HLXLogoFull() {
   return (
-    <svg viewBox="0 0 530 130" width="100%" style={{ display: 'block', borderRadius: 14 }} aria-label="Healthletics HLX">
+    <svg viewBox="0 0 530 130" width="100%" style={{ display: 'block', borderRadius: 14 }} role="img" aria-label="healthleticx Logo: Schriftzug HLX">
       <rect width="530" height="130" rx="14" fill="#1a5c3a" />
       <LogoInner />
     </svg>
@@ -355,40 +415,48 @@ function LogoInner() {
 /* ── Helpers ── */
 
 function Divider() {
-  return <div style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(212,184,74,0.15), transparent)', margin: '0 32px' }} />
+  return <div aria-hidden="true" style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(212,184,74,0.15), transparent)', margin: '0 32px' }} />
 }
 
 function SLabel({ children }: { children: string }) {
-  return <div style={{ fontSize: 10, fontWeight: 700, color: Y, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }}>{children}</div>
+  return <div style={{ fontSize: 11, fontWeight: 700, color: Y, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }}>{children}</div>
 }
 
-function SocialBtn({ label, handle, icon, color, url }: { label: string; handle: string; icon: string; color: string; url: string }) {
-  const [hov, setHov] = useState(false)
+function BackLink() {
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer"
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ display: 'flex', alignItems: 'center', gap: 14, background: hov ? 'rgba(212,184,74,0.05)' : 'rgba(255,255,255,0.03)', border: `1px solid ${hov ? 'rgba(212,184,74,0.25)' : 'rgba(255,255,255,0.07)'}`, borderRadius: 11, padding: '12px 16px', textDecoration: 'none', color: '#fff', transition: 'all 0.15s' }}>
-      <div style={{ width: 38, height: 38, borderRadius: 8, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, flexShrink: 0 }}>{icon}</div>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 600, fontSize: 13 }}>{label}</div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>{handle}</div>
-      </div>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+    <a href="#top" style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.3)', color: 'rgba(255,255,255,0.8)', padding: '7px 16px', borderRadius: 7, fontSize: 13, marginBottom: 36, textDecoration: 'none' }}>
+      <span aria-hidden="true">← </span>Zurück zur Startseite
     </a>
   )
 }
 
-function LegalPage({ title, onBack, children }: { title: string; onBack: () => void; children: React.ReactNode }) {
+function SocialBtn({ label, handle, icon, color, url }: { label: string; handle: string; icon: string; color: string; url: string }) {
+  const [hov, setHov] = useState(false)
+  const external = url.startsWith('http')
   return (
-    <div style={{ background: GD, color: '#fff', fontFamily: "'Inter', system-ui, sans-serif", minHeight: '100vh', padding: '80px 24px 60px' }}>
-      <div style={{ maxWidth: 720, margin: '0 auto' }}>
-        <button onClick={onBack} style={{ background: 'none', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.5)', padding: '7px 16px', borderRadius: 7, cursor: 'pointer', fontSize: 13, marginBottom: 40 }}>
-          ← Zurück
-        </button>
-        <h1 style={{ fontSize: 34, fontWeight: 800, marginBottom: 40, letterSpacing: -0.5 }}>{title}</h1>
-        <div style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.85, fontSize: 15 }}>{children}</div>
+    <a href={url} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{ display: 'flex', alignItems: 'center', gap: 14, background: hov ? 'rgba(212,184,74,0.05)' : 'rgba(255,255,255,0.03)', border: `1px solid ${hov ? 'rgba(212,184,74,0.35)' : 'rgba(255,255,255,0.12)'}`, borderRadius: 11, padding: '12px 16px', textDecoration: 'none', color: '#fff', transition: 'all 0.15s' }}>
+      <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: 8, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, flexShrink: 0 }}>{icon}</div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontWeight: 600, fontSize: 14 }}>{label}</div>
+        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginTop: 1 }}>{handle}</div>
       </div>
-    </div>
+      {external && <span className="sr-only">(öffnet in neuem Tab)</span>}
+      <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+    </a>
+  )
+}
+
+function LegalPage({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <main id="inhalt" tabIndex={-1} style={{ padding: '80px 24px 60px' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto' }}>
+        <BackLink />
+        <h1 tabIndex={-1} style={{ fontSize: 34, fontWeight: 800, marginBottom: 40, letterSpacing: -0.5 }}>{title}</h1>
+        <div style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.85, fontSize: 15 }}>{children}</div>
+      </div>
+    </main>
   )
 }
 
@@ -417,19 +485,23 @@ function ImpressumContent() {
 function DatenschutzContent() {
   return (
     <>
-      <p>Stand: 22. Oktober 2026</p>
+      <p>Stand: 31. Oktober 2026</p>
       <H2>1. Verantwortlicher</H2>
       <p>[Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: info@healthleticx.de</p>
       <H2>2. Grundsätzliches</H2>
-      <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Schriften und alle Programmteile werden direkt von dieser Website geladen, nicht von Drittanbietern wie Google Fonts.</p>
+      <p>Diese Website setzt keine Cookies, speichert nichts in deinem Browser und nutzt kein Tracking und keine Analyse-Dienste. Schriften und alle Programmteile werden direkt von dieser Website geladen, nicht von Drittanbietern wie Google Fonts. Es sind keine Inhalte Dritter (z. B. Videos, Karten oder Social-Media-Beiträge) eingebettet.</p>
       <H2>3. Hosting (Cloud86)</H2>
       <p>Die Website liegt auf einem Server der Cloud86 B.V. (Lavendelheide 21-108, 9202 PD Drachten, Niederlande), der in meinem Auftrag tätig ist (Auftragsverarbeitung nach Art. 28 DSGVO). Der Server steht in den Niederlanden, eine Übermittlung in Drittländer findet nicht statt. Beim Aufruf werden technisch notwendige Daten wie IP-Adresse, Datum und Uhrzeit, aufgerufene Seite und Browserangaben verarbeitet und in Server-Logdateien gespeichert, um die Website auszuliefern und vor Missbrauch zu schützen. Die Logdateien werden regelmäßig rotiert und gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren, funktionierenden Website).</p>
       <H2>4. Coaching-Anfrage</H2>
-      <p>Das Anfrageformular öffnet dein eigenes E-Mail-Programm mit einer vorbereiteten Nachricht an info@healthleticx.de. Erst wenn du sie dort absendest, erhalte ich deine Angaben (Name, E-Mail, optional Telefon, Wunschzeiten, Nachricht). Ich nutze sie, um deine Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO), und lösche sie, wenn keine Zusammenarbeit zustande kommt, spätestens nach 6 Monaten. Bitte schicke keine Gesundheitsdaten wie Diagnosen oder Medikamente per E-Mail.</p>
-      <H2>5. Externe Links</H2>
+      <p>Das Anfrageformular öffnet dein eigenes E-Mail-Programm mit einer vorbereiteten Nachricht an info@healthleticx.de. Die Website selbst speichert oder überträgt dabei nichts. Erst wenn du die E-Mail absendest, erhalte ich deine Angaben (Name, E-Mail, optional Telefon, Wunschzeiten, Nachricht). Pflicht sind nur Name, E-Mail und eine Wunschzeit, weil ich dich sonst nicht erreichen kann. Ich nutze die Angaben, um deine Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO), und lösche sie, wenn keine Zusammenarbeit zustande kommt, spätestens nach 6 Monaten. Bitte schicke keine Gesundheitsdaten wie Diagnosen oder Medikamente per E-Mail.</p>
+      <H2>5. E-Mail-Postfach</H2>
+      <p>Das Postfach info@healthleticx.de liegt ebenfalls bei der Cloud86 B.V. (siehe Punkt 3). Eingehende E-Mails werden dort auf dem Server gespeichert, bis ich sie lösche. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b bzw. lit. f DSGVO.</p>
+      <H2>6. Externe Links</H2>
       <p>Links zu Instagram, TikTok, YouTube, WhatsApp und Telegram sind einfache Links. Erst beim Anklicken verlässt du diese Website; dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>
-      <H2>6. Deine Rechte</H2>
+      <H2>7. Deine Rechte</H2>
       <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO). Beschweren kannst du dich bei einer Aufsichtsbehörde, z. B. beim Landesbeauftragten für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart.</p>
+      <H2>8. Widerspruchsrecht (Art. 21 DSGVO)</H2>
+      <p><strong>Soweit ich Daten auf Grundlage berechtigter Interessen (Art. 6 Abs. 1 lit. f DSGVO) verarbeite, kannst du dem aus Gründen, die sich aus deiner besonderen Situation ergeben, jederzeit widersprechen. Eine formlose Nachricht an info@healthleticx.de genügt.</strong></p>
     </>
   )
 }
@@ -441,10 +513,68 @@ function GesundheitContent() {
       <p>Ich bin kein Arzt und mache keine Heilversprechen. Mein Coaching, meine Inhalte und die App HLX Together dienen der allgemeinen Information und Motivation. Sie sind keine Diagnose, Therapie oder medizinische Beratung und ersetzen nicht den Rat von Ärztin oder Arzt, Physiotherapie oder Ernährungsfachkraft.</p>
       <H2>Bevor du startest</H2>
       <p>Sprich bitte vorher mit deiner Ärztin oder deinem Arzt, wenn du Vorerkrankungen, Verletzungen, Schmerzen, eine Schwangerschaft, eine Essstörung oder Medikamente hast. Intervallfasten oder ein Kaloriendefizit sind nicht für alle geeignet, insbesondere nicht für Schwangere, Stillende, Menschen mit Essstörungen oder Untergewicht und Personen unter 18 Jahren.</p>
+      <H2>Mindestalter</H2>
+      <p>Mein Coaching ist nur für Personen ab 18 Jahren gedacht.</p>
       <H2>Ergebnisse sind individuell</H2>
       <p>Wie sich Fitness, Gewicht oder Wohlbefinden verändern, hängt von vielen Faktoren ab. Beispiele und Erfahrungen anderer sind keine Garantie.</p>
       <H2>Im Notfall</H2>
       <p>Bei akuten Beschwerden wie Brustschmerz, Atemnot, Ohnmacht oder starker Blutung sofort den Notruf 112 wählen.</p>
+    </>
+  )
+}
+
+// ENTWURF: AGB und Widerrufsbelehrung vor dem Livegang anwaltlich prüfen lassen. Platzhalter in [eckigen Klammern] ausfüllen.
+function AgbContent() {
+  return (
+    <>
+      <p>Stand: 31. Oktober 2026 (Entwurf, wird vor Livegang rechtlich geprüft)</p>
+      <H2>1. Geltungsbereich und Anbieter</H2>
+      <p>Diese Bedingungen gelten für Verträge über mein persönliches 1:1 Coaching zwischen [Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort] (Anbieter) und dir als Kundin oder Kunde. Die Anfrage eines kostenlosen Erstgesprächs ist unverbindlich und begründet keinen Vertrag über bezahltes Coaching.</p>
+      <H2>2. Mindestalter</H2>
+      <p>Das Coaching richtet sich ausschließlich an Personen ab 18 Jahren. Mit dem Vertragsschluss bestätigst du, dass du mindestens 18 Jahre alt bist.</p>
+      <H2>3. Leistung</H2>
+      <p>Ich begleite dich zu Training, Ernährung und Mindset. Art und Umfang des Coachings ergeben sich aus dem jeweiligen Angebot: [Leistungsbeschreibung, z. B. Trainingsplan, Check-ins, Dauer]. Das Coaching dient der allgemeinen Information und Motivation. Es ist keine medizinische Beratung, Diagnose oder Therapie und ersetzt keine Ärztin und keinen Arzt. Ein bestimmter Erfolg wird nicht geschuldet. Siehe auch den <a href="#gesundheit" style={{ color: Y }}>Gesundheitshinweis</a>.</p>
+      <H2>4. Gesundheit und Mitwirkung</H2>
+      <p>Du bist selbst dafür verantwortlich, vor Beginn mit Vorerkrankungen, Verletzungen, Schmerzen, Schwangerschaft, Essstörung oder Medikamenteneinnahme ärztlichen Rat einzuholen. Du setzt die Empfehlungen eigenverantwortlich und im Rahmen deiner Gesundheit um.</p>
+      <H2>5. Preis und Zahlung</H2>
+      <p>Der Preis ergibt sich aus dem Angebot: [Betrag] € pro Monat inkl. gesetzlicher Umsatzsteuer, falls anfallend [Hinweis zur Umsatzsteuer, z. B. Kleinunternehmerregelung]. Die Zahlung erfolgt [Zahlungsweise und Fälligkeit].</p>
+      <H2>6. Laufzeit und Kündigung</H2>
+      <p>Der Vertrag läuft [Laufzeit, z. B. monatlich] und verlängert sich nicht länger als jeweils um einen Monat, wenn nicht gekündigt wird. Du kannst ihn jederzeit mit einer Frist von [Frist, höchstens einen Monat] in Textform (z. B. per E-Mail an info@healthleticx.de) kündigen. Das Recht zur Kündigung aus wichtigem Grund bleibt unberührt.</p>
+      <H2>7. Widerrufsrecht</H2>
+      <p>Als Verbraucherin oder Verbraucher hast du ein Widerrufsrecht. Einzelheiten stehen in der <a href="#widerruf" style={{ color: Y }}>Widerrufsbelehrung</a>.</p>
+      <H2>8. Haftung</H2>
+      <p>Ich hafte unbeschränkt bei Vorsatz und grober Fahrlässigkeit, bei Verletzung von Leben, Körper oder Gesundheit sowie nach dem Produkthaftungsgesetz. Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die Haftung auf den vorhersehbaren, vertragstypischen Schaden begrenzt. Im Übrigen ist die Haftung bei leichter Fahrlässigkeit ausgeschlossen.</p>
+      <H2>9. Fernunterrichtsschutzgesetz (FernUSG)</H2>
+      <p>[Hier ergänzen, nachdem rechtlich geklärt ist, ob das Coaching als Fernunterricht gilt: entweder die ZFU-Zulassungsnummer oder die Begründung, warum keine Zulassung nötig ist. Bis dahin das bezahlte Coaching nicht verkaufen.]</p>
+      <H2>10. Datenschutz und Streitbeilegung</H2>
+      <p>Informationen zur Verarbeitung deiner Daten findest du in der <a href="#datenschutz" style={{ color: Y }}>Datenschutzerklärung</a>. Ich nehme nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil. Es gilt deutsches Recht; zwingende Verbraucherschutzvorschriften deines Aufenthaltsstaates bleiben unberührt.</p>
+    </>
+  )
+}
+
+function WiderrufContent() {
+  return (
+    <>
+      <p>Diese Belehrung gilt für Verbraucherinnen und Verbraucher beim Kauf des bezahlten Coachings (Entwurf, wird vor Livegang rechtlich geprüft).</p>
+      <H2>Widerrufsrecht</H2>
+      <p>Du hast das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.</p>
+      <p style={{ marginTop: 12 }}>Um dein Widerrufsrecht auszuüben, musst du mir ([Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: info@healthleticx.de) mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über deinen Entschluss, diesen Vertrag zu widerrufen, informieren. Du kannst dafür das beigefügte Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.</p>
+      <p style={{ marginTop: 12 }}>Zur Wahrung der Widerrufsfrist reicht es aus, dass du die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absendest.</p>
+      <H2>Folgen des Widerrufs</H2>
+      <p>Wenn du diesen Vertrag widerrufst, habe ich dir alle Zahlungen, die ich von dir erhalten habe, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über deinen Widerruf bei mir eingegangen ist. Für diese Rückzahlung verwende ich dasselbe Zahlungsmittel, das du bei der ursprünglichen Transaktion eingesetzt hast.</p>
+      <p style={{ marginTop: 12 }}>Hast du verlangt, dass die Dienstleistung während der Widerrufsfrist beginnen soll, so hast du mir einen angemessenen Betrag zu zahlen, der dem Anteil der bis zu dem Zeitpunkt, zu dem du mich von der Ausübung des Widerrufsrechts unterrichtest, bereits erbrachten Dienstleistungen im Vergleich zum Gesamtumfang der im Vertrag vorgesehenen Dienstleistungen entspricht.</p>
+      <H2>Vorzeitiges Erlöschen</H2>
+      <p>Das Widerrufsrecht erlischt bei einem Vertrag zur Erbringung von Dienstleistungen, wenn ich die Dienstleistung vollständig erbracht habe und mit der Ausführung erst begonnen habe, nachdem du dazu deine ausdrückliche Zustimmung gegeben hast und gleichzeitig deine Kenntnis davon bestätigt hast, dass du dein Widerrufsrecht bei vollständiger Vertragserfüllung durch mich verlierst.</p>
+      <H2>Muster-Widerrufsformular</H2>
+      <p>(Wenn du den Vertrag widerrufen willst, fülle dieses Formular aus und sende es zurück.)</p>
+      <p style={{ marginTop: 12 }}>An [Vorname Nachname], healthleticx, [Straße Hausnummer], [PLZ Ort], E-Mail: info@healthleticx.de:<br />
+        Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung: ______<br />
+        Bestellt am (*) / erhalten am (*): ______<br />
+        Name der Verbraucherin / des Verbrauchers: ______<br />
+        Anschrift der Verbraucherin / des Verbrauchers: ______<br />
+        Unterschrift (nur bei Mitteilung auf Papier): ______<br />
+        Datum: ______<br />
+        (*) Unzutreffendes streichen.</p>
     </>
   )
 }
