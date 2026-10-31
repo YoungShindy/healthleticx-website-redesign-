@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "healthletics-website",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "5174"],
-      "port": 5174
+      "name": "healthleticx-website",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8000"],
+      "port": 8000
     }
   ]
 }
